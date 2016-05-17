@@ -1,0 +1,29 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditPlayer", "RedditPlayer.Core\RedditPlayer.csproj", "{DF737DB6-2E43-487C-A779-6EF611E1336E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditPlayer.Mac", "RedditPlayer.Mac\RedditPlayer.Mac.csproj", "{1063D837-E822-4AC2-9919-94C1D6C58F69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF737DB6-2E43-487C-A779-6EF611E1336E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF737DB6-2E43-487C-A779-6EF611E1336E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF737DB6-2E43-487C-A779-6EF611E1336E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF737DB6-2E43-487C-A779-6EF611E1336E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1063D837-E822-4AC2-9919-94C1D6C58F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1063D837-E822-4AC2-9919-94C1D6C58F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1063D837-E822-4AC2-9919-94C1D6C58F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1063D837-E822-4AC2-9919-94C1D6C58F69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$1.ResourceNamePolicy = FileFormatDefault
+	EndGlobalSection
+EndGlobal
