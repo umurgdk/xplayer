@@ -6,12 +6,18 @@ namespace RedditPlayer.Mac.Views
     {
         public static NSTextField Create ()
         {
+            return Create ("");
+        }
+
+        public static NSTextField Create (string defaultText)
+        {
             var label = new NSTextField ();
             label.Bezeled = false;
             label.Editable = false;
             label.Selectable = false;
             label.DrawsBackground = false;
             label.TranslatesAutoresizingMaskIntoConstraints = false;
+            label.StringValue = defaultText;
 
             return label;
         }

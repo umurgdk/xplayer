@@ -17,7 +17,7 @@ namespace RedditPlayer.Mac.Views.Playlists
                 view.OutlineView,
                 viewModel.Reddits,
                 r => r.Grouping,
-                r => "Star",
+                r => r.Grouping == "Favorite" ? "Star" : "Playlist",
                 r => r.Title);
 
             dataDelegate = new GenericOutlineViewDelegate<SubReddit> (view.OutlineView, dataSource);

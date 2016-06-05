@@ -32,7 +32,7 @@ namespace RedditPlayer.Mac.DataAdapters
 
         public override NSTableRowView RowViewForItem (NSOutlineView outlineView, Foundation.NSObject item)
         {
-            return new GenericOutlineRowView ();
+            return new GrayRowView ();
         }
 
         public override bool IsGroupItem (NSOutlineView outlineView, Foundation.NSObject item)

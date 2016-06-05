@@ -7,7 +7,7 @@ using CoreImage;
 
 namespace RedditPlayer.Mac.DataAdapters
 {
-    public class GenericOutlineCellView : NSView
+    public class GenericOutlineCellView : NSView, ISelectableView
     {
         public const string KIdentifier = "GenericOutlineCellView";
         public NSImageView ImageView { get; protected set; }
@@ -25,7 +25,7 @@ namespace RedditPlayer.Mac.DataAdapters
             set
             {
                 selected = value;
-                UpdateStyle ();
+                DidSelectionChanged (value);
             }
         }
 
@@ -83,13 +83,13 @@ namespace RedditPlayer.Mac.DataAdapters
             } else {
                 AddConstraints (NSLayoutExtensions.FillVertical (ImageView, false));
                 AddConstraint (NSLayoutConstraint.Create (ImageView, NSLayoutAttribute.Width, NSLayoutRelation.Equal, ImageView, NSLayoutAttribute.Height, 1.0f, 0.0f));
-                AddConstraints (NSLayoutExtensions.Stack (StackOrientation.Horizontal, true, false, true, ImageView, TextField));
+                AddConstraints (NSLayoutExtensions.StackOld (StackOrientation.Horizontal, true, false, true, ImageView, TextField));
                 AddConstraint (NSLayoutConstraint.Create (TextField, NSLayoutAttribute.Height, NSLayoutRelation.Equal, ImageView, NSLayoutAttribute.Height, 1.0f, 0.0f));
                 AddConstraint (NSLayoutConstraint.Create (TextField, NSLayoutAttribute.Top, NSLayoutRelation.Equal, ImageView, NSLayoutAttribute.Top, 1.0f, 0.0f));
             }
         }
 
-        void UpdateStyle ()
+        public void DidSelectionChanged (bool isSelected)
         {
         }
     }

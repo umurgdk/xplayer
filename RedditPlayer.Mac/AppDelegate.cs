@@ -3,27 +3,29 @@ using Foundation;
 using System.Diagnostics;
 using RedditPlayer;
 using RedditPlayer.Mac.Views;
+using WebKit;
+using RedditPlayer.Services;
 
 namespace RedditPlayer.Mac
 {
     [Register ("AppDelegate")]
     public class AppDelegate : NSApplicationDelegate
     {
+		Application app;
+		Navigator navigator;
+
         public AppDelegate ()
         {
+			app = new Application (new Navigator ());
         }
 
         public override void DidFinishLaunching (NSNotification notification)
         {
             // Insert code here to initialize your application
-            Debug.WriteLine ("Hello world");
+            //NSUserDefault NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints
+            NSUserDefaults.StandardUserDefaults.SetBool (true, "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints");
 
-            var applicationViewModel = new ApplicationViewModel ();
-
-            var playerWindow = new PlayerWindow (applicationViewModel);
-
-            var mainWindowController = new MainWindowController (applicationViewModel, playerWindow);
-            mainWindowController.ShowWindow (this);
+			app.Start ();
         }
 
         public override void WillTerminate (NSNotification notification)

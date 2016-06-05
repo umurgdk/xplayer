@@ -1,41 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
 using AppKit;
 using ReactiveUI;
-using RedditPlayer.Mac.Extensions;
+using RedditPlayer.Mac.Views.Player;
+using RedditPlayer.Mac.Views.SearchBar;
+using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
+using RedditPlayer.Mac.Views.SongsList;
 
 namespace RedditPlayer.Mac.Views.Detail
 {
     public class DetailView : ReactiveView, IDisposable
     {
-        const string TitleFontName = "SF UI Display Thin";
-        const float TitleFontSize = 22;
-
-        const string DescriptionFontName = "SF UI Display Regular";
-        const int DescriptionFontSize = 12;
-
-        public readonly NSTextField TitleLabel;
-        public readonly NSTextField DescriptionLabel;
         public readonly SearchBarView SearchBarView;
 
-        public DetailView ()
+        public readonly PlayerView PlayerView;
+
+        NSStackView contentStack;
+        NSStackView outerStack;
+
+        public DetailView (SearchBarView searchBarView, PlayerView playerView)
         {
-            TitleLabel = NSLabel.CreateWithFont (TitleFontName, TitleFontSize);
-            TitleLabel.Identifier = "TitleLabel";
-            TitleLabel.TextColor = NSColor.FromRgb (51, 51, 51);
+            contentStack = new NSStackView ();
+            contentStack.TranslatesAutoresizingMaskIntoConstraints = false;
+            contentStack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
+            contentStack.SetHuggingPriority ((float)NSLayoutPriority.WindowSizeStayPut, NSLayoutConstraintOrientation.Horizontal);
+            contentStack.Spacing = 0;
 
-            DescriptionLabel = NSLabel.CreateWithFont (DescriptionFontName, DescriptionFontSize);
-            DescriptionLabel.Identifier = "DescriptionLabel";
-            DescriptionLabel.TextColor = NSColor.FromRgb (142, 142, 142);
+            outerStack = new NSStackView ();
+            outerStack.TranslatesAutoresizingMaskIntoConstraints = false;
+            outerStack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
+            outerStack.SetHuggingPriority ((float)NSLayoutPriority.WindowSizeStayPut, NSLayoutConstraintOrientation.Horizontal);
+            outerStack.Spacing = 0;
 
-            SearchBarView = new SearchBarView ();
-            SearchBarView.Identifier = "SearchBarView";
 
-            AddSubview (SearchBarView);
-            AddSubview (TitleLabel);
-            AddSubview (DescriptionLabel);
+            SearchBarView = searchBarView;
+            contentStack.AddArrangedSubview (searchBarView);
+
+            PlayerView = playerView;
+            PlayerView.SetContentHuggingPriorityForOrientation ((float)NSLayoutPriority.DefaultHigh, NSLayoutConstraintOrientation.Vertical);
+
+            outerStack.AddArrangedSubview (contentStack);
+
+            AddSubview (outerStack);
 
             AddDefaultLayoutConstraints ();
+        }
+
+        public void ShowPlayerView ()
+        {
+            outerStack.AddArrangedSubview (PlayerView);
+        }
+
+        public void HidePlayerView ()
+        {
+            outerStack.RemoveArrangedSubview (PlayerView);
         }
 
         public override void ViewDidMoveToWindow ()
@@ -43,16 +60,19 @@ namespace RedditPlayer.Mac.Views.Detail
             base.ViewDidMoveToWindow ();
         }
 
+        public void SetContentView (NSView view)
+        {
+            if (contentStack.ArrangedSubviews.Length > 1) {
+                contentStack.RemoveArrangedSubview (contentStack.ArrangedSubviews [1]);
+            }
+
+            contentStack.AddArrangedSubview (view);
+        }
+
         void AddDefaultLayoutConstraints ()
         {
-            var layoutConstraints = new List<NSLayoutConstraint> { };
-
-            layoutConstraints.AddRange (NSLayoutExtensions.FillHorizontal (SearchBarView, false));
-            layoutConstraints.AddRange (NSLayoutExtensions.FillHorizontal (TitleLabel, true));
-            layoutConstraints.AddRange (NSLayoutExtensions.FillHorizontal (DescriptionLabel, true));
-            layoutConstraints.AddRange (NSLayoutExtensions.Stack (StackOrientation.Vertical, true, true, true, SearchBarView, TitleLabel, DescriptionLabel));
-
-            AddConstraints (layoutConstraints.ToArray ());
+            AddConstraints (FillHorizontal (outerStack, false));
+            AddConstraints (FillVertical (outerStack, false));
         }
     }
 }

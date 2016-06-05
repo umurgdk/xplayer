@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using RedditPlayer.Domain.Media;
 
 namespace RedditPlayer.Domain.Reddit
 {
@@ -16,15 +17,20 @@ namespace RedditPlayer.Domain.Reddit
             var client = new HttpClient ();
             var url = SUBREDDIT_URL + name + "/about.json";
             var json = await client.GetStringAsync (url);
-            var jobject = JObject.Parse (json);
+            var jobject = JObject.Parse (json);                                                                                       
 
             return SubReddit.FromJson (jobject);
         }
 
-        public static async Task<List<RedditMedia>> GetSubRedditMedias (SubReddit subReddit)
+        public static async Task<List<Track>> GetSubRedditMedias (SubReddit subReddit)
+        {
+            return await GetSubRedditMedias(subReddit.Name);
+        }
+
+        public static async Task<List<Track>> GetSubRedditMedias (string subredditName)
         {
             var client = new HttpClient ();
-            var url = SUBREDDIT_URL + subReddit.Name + "/hot.json";
+            var url = SUBREDDIT_URL + subredditName + "/hot.json";
             var json = await client.GetStringAsync (url);
 
             var jObject = JObject.Parse (json);
@@ -33,6 +39,7 @@ namespace RedditPlayer.Domain.Reddit
             return children
                 .Select (child => RedditMedia.FromJson (child))
                 .Where (media => media.Provider.IsSupported)
+                .Select (media => media.AsTrack())
                 .ToList ();
         }
     }

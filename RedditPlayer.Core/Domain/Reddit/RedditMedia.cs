@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
-using RedditPlayer.Domain.MediaProvider;
+using RedditPlayer.Domain.MediaProviders;
+using RedditPlayer.Domain.Media;
 
 namespace RedditPlayer.Domain.Reddit
 {
@@ -16,17 +17,18 @@ namespace RedditPlayer.Domain.Reddit
 
         public IMediaProvider Provider { get; set; }
 
-        public static RedditMedia FromJson (JObject jObject)
+        public static RedditMedia FromJson(JObject jObject)
         {
-            var data = jObject ["data"];
-            var title = data ["title"].Value<string> ();
-            var url = data ["url"].Value<string> ();
-            var thumbnailUrl = data ["thumbnail"].Value<string> ();
+            var data = jObject["data"];
+            var title = data["title"].Value<string>();
+            var url = data["url"].Value<string>();
+            var thumbnailUrl = data["thumbnail"].Value<string>();
 
-            var mediaProviders = new MediaProvider.MediaProvider ();
-            var provider = mediaProviders.FromUrl (url);
+            var mediaProviders = new MediaProvider();
+            var provider = mediaProviders.FromUrl(url);
 
-            return new RedditMedia {
+            return new RedditMedia
+            {
                 Title = title,
                 Url = url,
                 ThumbnailUrl = thumbnailUrl,
@@ -34,14 +36,20 @@ namespace RedditPlayer.Domain.Reddit
             };
         }
 
-        public override int GetHashCode ()
+        public override int GetHashCode()
         {
-            return (Title + Url + ThumbnailUrl).GetHashCode ();
+            return (Title + Url + ThumbnailUrl).GetHashCode();
         }
 
-        public bool Equals (RedditMedia other)
+        public bool Equals(RedditMedia other)
         {
             return Title == other.Title && Url == other.Url && ThumbnailUrl == other.ThumbnailUrl;
+        }
+
+        // TODO: Add duration
+        public Track AsTrack()
+        {
+            return new Track(Url, Provider, Title, ThumbnailUrl, TimeSpan.FromTicks(0), null, null);
         }
     }
 }

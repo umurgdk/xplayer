@@ -68,6 +68,36 @@
     <Reference Include="Splat">
       <HintPath>..\packages\Splat.1.6.2\lib\Xamarin.Mac10\Splat.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>..\packages\Google.Apis.Core.1.13.1\lib\portable-net45+sl50+netcore45+wpa81+wp8\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Zlib.Portable">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\packages\Google.Apis.1.13.1\lib\portable-net45+sl50+netcore45+wpa81+wp8\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>..\packages\Google.Apis.Auth.1.13.1\lib\portable-net45+sl50+netcore45+wpa81+wp8\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.YouTube.v3">
+      <HintPath>..\packages\Google.Apis.YouTube.v3.1.13.1.511\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
@@ -97,6 +127,39 @@
     <ImageAsset Include="Assets.xcassets\Search.imageset\Search.png" />
     <ImageAsset Include="Assets.xcassets\Search.imageset\Search%402x.png" />
     <ImageAsset Include="Assets.xcassets\Search.imageset\Search%403x.png" />
+    <ImageAsset Include="Assets.xcassets\EmptyCover.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\EmptyCover.imageset\EmptyCover.png" />
+    <ImageAsset Include="Assets.xcassets\EmptyCover.imageset\EmptyCover%402x.png" />
+    <ImageAsset Include="Assets.xcassets\EmptyCover.imageset\EmptyCover%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Play.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Pause.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Rewind.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Forward.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Play.imageset\Play.png" />
+    <ImageAsset Include="Assets.xcassets\Play.imageset\Play%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Play.imageset\Play%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Pause.imageset\Pause.png" />
+    <ImageAsset Include="Assets.xcassets\Pause.imageset\Pause%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Pause.imageset\Pause%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Rewind.imageset\Rewind.png" />
+    <ImageAsset Include="Assets.xcassets\Rewind.imageset\Rewind%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Rewind.imageset\Rewind%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Forward.imageset\Forward.png" />
+    <ImageAsset Include="Assets.xcassets\Forward.imageset\Forward%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Forward.imageset\Forward%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker.png" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%403x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%402x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Image-1.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig.png" />
+    <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig%402x.png" />
+    <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -104,11 +167,22 @@
     <Folder Include="Extensions\" />
     <Folder Include="Assets.xcassets\Star.imageset\" />
     <Folder Include="Assets.xcassets\Playlist.imageset\" />
-    <Folder Include="ViewsOld\" />
     <Folder Include="Views\Playlists\" />
     <Folder Include="Views\Detail\" />
     <Folder Include="DataAdapters\" />
     <Folder Include="Assets.xcassets\Search.imageset\" />
+    <Folder Include="Views\SearchBar\" />
+    <Folder Include="Views\Player\" />
+    <Folder Include="Assets.xcassets\EmptyCover.imageset\" />
+    <Folder Include="Assets.xcassets\Play.imageset\" />
+    <Folder Include="Assets.xcassets\Pause.imageset\" />
+    <Folder Include="Assets.xcassets\Rewind.imageset\" />
+    <Folder Include="Assets.xcassets\Forward.imageset\" />
+    <Folder Include="Assets.xcassets\Speaker.imageset\" />
+    <Folder Include="Assets.xcassets\SpeakerLoud.imageset\" />
+    <Folder Include="Views\SongsList\" />
+    <Folder Include="Views\SearchResults\" />
+    <Folder Include="Assets.xcassets\RedditIconBig.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -121,43 +195,47 @@
     <Compile Include="Extensions\NSImage+Resize.cs" />
     <Compile Include="Extensions\NSImage+Tint.cs" />
     <Compile Include="Views\PlayerWindow.cs" />
+    <Compile Include="Views\PlayerWindowController.cs" />
     <Compile Include="Views\NSLabel.cs" />
     <Compile Include="Extensions\NSLayoutExtensions.cs" />
-    <Compile Include="ViewsOld\MainWindow.cs" />
-    <Compile Include="ViewsOld\MainWindow.designer.cs">
-      <DependentUpon>MainWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewsOld\MainWindowController.cs" />
-    <Compile Include="ViewsOld\RedditMediaItemView.cs" />
-    <Compile Include="ViewsOld\RedditMediasTableViewSource.cs" />
-    <Compile Include="ViewsOld\RedditSourceItemCellView.cs" />
-    <Compile Include="ViewsOld\RedditsOutlineRowView.cs" />
-    <Compile Include="ViewsOld\RedditsOutlineView.cs" />
-    <Compile Include="ViewsOld\RedditsOutlineViewDataSource.cs" />
-    <Compile Include="ViewsOld\RedditsOutlineViewDelegate.cs" />
-    <Compile Include="ViewsOld\RedditsSourceItem.cs" />
-    <Compile Include="ViewsOld\RedditsTableViewSource.cs" />
-    <Compile Include="ViewsOld\RedditTableItemView.cs" />
-    <Compile Include="ViewsOld\RedditTableItemView.designer.cs">
-      <DependentUpon>RedditTableItemView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewsOld\WindowContentView.cs" />
     <Compile Include="Views\Detail\DetailView.cs" />
     <Compile Include="Views\Detail\DetailViewController.cs" />
     <Compile Include="Views\Playlists\PlaylistsView.cs" />
     <Compile Include="Views\Playlists\PlaylistsViewController.cs" />
     <Compile Include="DataAdapters\GenericOutlineViewSource.cs" />
-    <Compile Include="DataAdapters\GenericOutlineRowView.cs" />
+    <Compile Include="DataAdapters\GrayRowView.cs" />
     <Compile Include="DataAdapters\GenericOutlineItemWrapper.cs" />
     <Compile Include="DataAdapters\GenericOutlineViewDelegate.cs" />
     <Compile Include="DataAdapters\GenericOutlineCellView.cs" />
-    <Compile Include="Views\Playlists\PlaylistOutlineView.cs" />
-    <Compile Include="Views\Detail\SearchBarView.cs" />
-    <Compile Include="Views\Detail\SearchBarViewController.cs" />
+    <Compile Include="Views\SearchBar\SearchBarView.cs" />
+    <Compile Include="Views\SearchBar\SearchBarViewController.cs" />
+    <Compile Include="Views\Player\PlayerView.cs" />
+    <Compile Include="Extensions\NSButtonExtensions.cs" />
+    <Compile Include="Views\Player\PlayerControlsView.cs" />
+    <Compile Include="Views\Player\SoundControlView.cs" />
+    <Compile Include="Views\SongsList\SongsListView.cs" />
+    <Compile Include="Views\SongsList\SongView.cs" />
+    <Compile Include="DataAdapters\GenericTableViewSource.cs" />
+    <Compile Include="Views\SongsList\SongThumbnailView.cs" />
+    <Compile Include="Views\SongsList\SongRowView.cs" />
+    <Compile Include="Views\Playlists\PlaylistDetailView.cs" />
+    <Compile Include="Views\Playlists\PlaylistDetailViewController.cs" />
+    <Compile Include="Views\SearchResults\SearchResultHeaderView.cs" />
+    <Compile Include="Views\SearchResults\SearchResultSongView.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsViewController.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsView.cs" />
+    <Compile Include="DataAdapters\SearchResultsTableSource.cs" />
+    <Compile Include="DataAdapters\ISelectableView.cs" />
+    <Compile Include="Views\RPTableView.cs" />
+    <Compile Include="RPViewInspector.cs" />
+    <Compile Include="Views\WelcomeView.cs" />
+    <Compile Include="Views\MainView.cs" />
+    <Compile Include="Views\Navigator.cs" />
+    <Compile Include="Views\MainViewController.cs" />
+    <Compile Include="Views\Player\PlayerViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
-    <InterfaceDefinition Include="ViewsOld\MainWindow.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">
@@ -169,6 +247,7 @@
     <BundleResource Include="Resources\windowbg.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

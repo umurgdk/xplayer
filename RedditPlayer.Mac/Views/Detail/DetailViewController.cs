@@ -1,31 +1,39 @@
 ﻿using System;
 using System.Reactive.Linq;
 using ReactiveUI;
+using AppKit;
+using RedditPlayer.ViewModels;
+using RedditPlayer.Mac.Views.SearchBar;
+using RedditPlayer.Mac.Views.Player;
 
 namespace RedditPlayer.Mac.Views.Detail
 {
     public class DetailViewController : ReactiveViewController, IDisposable
     {
-        new DetailView View
+        public new DetailView View
         {
             get { return (DetailView)base.View; }
             set { base.View = value; }
         }
 
-        public DetailViewController (ApplicationViewModel viewModel)
+        public DetailViewController (SearchBarViewController searchBarViewController, PlayerViewController playerViewController)
         {
-            View = new DetailView ();
+            View = new DetailView (searchBarViewController.View, playerViewController.View);
+        }
 
-            var reddit = viewModel.WhenAnyValue (vm => vm.SelectedSubReddit)
-                                  .Where (r => r != null);
+        public void SetContentView (NSView contentView)
+        {
+            View.SetContentView (contentView);
+        }
 
-            reddit.Select (r => r.Title)
-                  .Where (title => !string.IsNullOrEmpty (title))
-                  .BindTo (View.TitleLabel, label => label.StringValue);
+        public void ShowPlayerView ()
+        {
+            View.ShowPlayerView ();
+        }
 
-            reddit.Select (r => r.Description)
-                  .Where (description => !string.IsNullOrEmpty (description))
-                  .BindTo (View.DescriptionLabel, label => label.StringValue);
+        public void HidePlayerView ()
+        {
+            View.HidePlayerView ();
         }
     }
 }
