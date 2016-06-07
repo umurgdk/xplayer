@@ -10,6 +10,26 @@ namespace RedditPlayer.Mac.Views.Player
         public readonly NSSlider VolumeSlider;
         public readonly NSButton LoudButton;
 
+        bool muted;
+        public bool Muted
+        {
+            get
+            {
+                return muted;
+            }
+
+            set
+            {
+                muted = value;
+
+                if (muted) {
+                    ShowMutedIcon ();
+                } else {
+                    ShowUnmutedIcon ();
+                }
+            }
+        }
+
         public SoundControlView ()
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
@@ -42,6 +62,16 @@ namespace RedditPlayer.Mac.Views.Player
             AddConstraint (PinLeft (MuteButton));
             AddConstraints (StackHorizontal (0, NSLayoutFormatOptions.AlignAllCenterY, MuteButton, VolumeSlider, LoudButton));
             AddConstraint (PinRight (LoudButton, this, -8));
+        }
+
+        void ShowMutedIcon ()
+        {
+            MuteButton.Image = NSImage.ImageNamed ("SpeakerMuted");
+        }
+
+        void ShowUnmutedIcon ()
+        {
+            MuteButton.Image = NSImage.ImageNamed ("Speaker");
         }
     }
 }

@@ -29,11 +29,16 @@ namespace RedditPlayer.Mac.Views.SearchResults
             Title.Font = defaultFont;
             Title.TextColor = defaultColor;
             Title.Identifier = "SongTitle";
+            //Title.AllowsDefaultTighteningForTruncation = true;
+            Title.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
             Duration = NSLabel.Create ("00:00");
             Duration.Font = defaultFont;
             Duration.TextColor = defaultColor;
             Duration.Identifier = "Duration";
+            Duration.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Horizontal);
+            Duration.SetContentCompressionResistancePriority (1000, NSLayoutConstraintOrientation.Horizontal);
+
 
             AddSubview (Thumbnail);
             AddSubview (Title);
@@ -48,10 +53,12 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
             AddConstraint (PinLeft (Thumbnail, this, 20));
             AddConstraints (FillVertical (Thumbnail, 4));
-            AddConstraints (StackHorizontal (13, Thumbnail, Title));
+            AddConstraints (StackHorizontal (13, Thumbnail, Title, Duration));
             AddConstraint (PinCenterY (Title, Thumbnail, -2.0f));
+            AddConstraint (PinFirstBaseline (Title, Duration));
             AddConstraint (PinRight (Duration, this, -20));
-            AddConstraints (HorizontalSpaceBetween (Title, Duration, NSLayoutFormatOptions.AlignAllFirstBaseline));
+
+            AddConstraint (MinimumWidth (Title, 100));
 
             AddConstraint (FixedWidth (Thumbnail, 27));
             AddConstraint (FixedHeight (Thumbnail, 20));

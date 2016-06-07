@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Linq;
 using RedditPlayer.Services;
+using Splat;
 
 namespace RedditPlayer.ViewModels
 {
@@ -27,14 +28,8 @@ namespace RedditPlayer.ViewModels
         ReactiveCommand<IEnumerable<Artist>> searchArtists;
         ReactiveCommand<IEnumerable<Album>> searchAlbums;
 
-        IEnumerable<IMediaProvider> mediaProviders;
-        INavigator navigator;
-
-        public SearchViewModel(INavigator navigator, IEnumerable<IMediaProvider> mediaProviders)
+        public SearchViewModel()
         {
-            this.mediaProviders = mediaProviders;
-            this.navigator = navigator;
-
             Tracks = new ReactiveList<Track> ();
             Artists = new ReactiveList<Artist> ();
             Albums = new ReactiveList<Album> ();
@@ -88,11 +83,14 @@ namespace RedditPlayer.ViewModels
 
         void SearchCompleted()
         {
-            navigator.PresentSearchResults (this);
+            var navigator = Locator.CurrentMutable.GetService<INavigator> ();
+            navigator.PresentSearchResults ();
         }
 
         async Task<IEnumerable<Track>> ImplSearchTracks(object arg)
         {
+            var mediaProviders = Locator.CurrentMutable.GetService<IMediaProvider []> ();
+
             var trackTasks = mediaProviders.Select(provider => provider.SearchTracks(Query));
             var trackResults = await Task.WhenAll(trackTasks);
 

@@ -7,53 +7,47 @@ namespace RedditPlayer.Mac.Extensions
     {
         public static CGPath ToCGPath (this NSBezierPath path)
         {
-            //int i, numElements;
+            int i, numElements;
 
-            //// Need to begin a path here.
-            //CGPath immutablePath = null;
+            // Need to begin a path here.
+            CGPath cgpath = new CGPath ();
 
-            //// Then draw the path elements.
-            //numElements = (int)path.ElementCount;
+            // Then draw the path elements.
+            numElements = (int)path.ElementCount;
 
-            //if (numElements > 0) {
-            //    CGPath. path = CGPathCreateMutable ();
-            //    NSPoint points [3];
-            //    BOOL didClosePath = YES;
+            if (numElements > 0) {
+                CGPoint [] points = new CGPoint [3];
+                bool didClosePath = true;
 
-            //    for (i = 0; i < numElements; i++) {
-            //        switch ([self elementAtIndex: i associatedPoints: points]) {
-            //        case NSMoveToBezierPathElement:
-            //            CGPathMoveToPoint (path, NULL, points [0].x, points [0].y);
-            //            break;
+                for (i = 0; i < numElements; i++) {
+                    switch (path.ElementAt (i, out points)) {
+                    case NSBezierPathElement.MoveTo:
+                        cgpath.MoveToPoint (points [0].X, points [0].Y);
+                        break;
 
-            //        case NSLineToBezierPathElement:
-            //            CGPathAddLineToPoint (path, NULL, points [0].x, points [0].y);
-            //            didClosePath = NO;
-            //            break;
+                    case NSBezierPathElement.LineTo:
+                        cgpath.AddLineToPoint (points [0].X, points [0].Y);
+                        didClosePath = false;
+                        break;
 
-            //        case NSCurveToBezierPathElement:
-            //            CGPathAddCurveToPoint (path, NULL, points [0].x, points [0].y,
-            //                                points [1].x, points [1].y,
-            //                                points [2].x, points [2].y);
-            //            didClosePath = NO;
-            //            break;
+                    case NSBezierPathElement.CurveTo:
+                        cgpath.AddCurveToPoint (points [0], points [1], points [2]);
+                        didClosePath = false;
+                        break;
 
-            //        case NSClosePathBezierPathElement:
-            //            CGPathCloseSubpath (path);
-            //            didClosePath = YES;
-            //            break;
-            //        }
-            //    }
+                    case NSBezierPathElement.ClosePath:
+                        cgpath.CloseSubpath ();
+                        didClosePath = true;
+                        break;
+                    }
+                }
 
-            //    // Be sure the path is closed or Quartz may not do valid hit detection.
-            //    if (!didClosePath)
-            //        CGPathCloseSubpath (path);
+                // Be sure the path is closed or Quartz may not do valid hit detection.
+                if (!didClosePath)
+                    cgpath.CloseSubpath ();
+            }
 
-            //    immutablePath = CGPathCreateCopy (path);
-            //    CGPathRelease (path);
-            //}
-
-            //return immutablePath;
+            return cgpath;
         }
     }
 }

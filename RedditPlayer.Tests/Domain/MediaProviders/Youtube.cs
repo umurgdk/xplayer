@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using RedditPlayer.Domain.MediaProviders;
 using System.Threading.Tasks;
+using RedditPlayer.Domain.Media;
 
 namespace RedditPlayer.Tests
 {
@@ -11,12 +12,25 @@ namespace RedditPlayer.Tests
         [Test()]
         public async Task GetTrackForIds()
         {
-            var youtube = Youtube.Instance;
+            var youtube = new Youtube (new YoutubeDummyPlayer ());
 
             var tracks = await youtube.GetTrackForId("Vy3DvF8nibA");
 
             Assert.AreEqual("Top 10 Things I Wish I Had Known About C++", tracks[0].Title);
             Assert.IsNotEmpty(tracks[0].CoverUrl);
+        }
+    }
+
+    public class YoutubeDummyPlayer : IPlayer
+    {
+        public void Pause ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        public void Play (Track track)
+        {
+            throw new NotImplementedException ();
         }
     }
 }

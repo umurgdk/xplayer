@@ -4,7 +4,8 @@ using ReactiveUI;
 using RedditPlayer.Mac.Views.Player;
 using RedditPlayer.Mac.Views.SearchBar;
 using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
-using RedditPlayer.Mac.Views.SongsList;
+//using RedditPlayer.Mac.Views.SongsList;
+using System.Collections.Generic;
 
 namespace RedditPlayer.Mac.Views.Detail
 {
@@ -14,45 +15,45 @@ namespace RedditPlayer.Mac.Views.Detail
 
         public readonly PlayerView PlayerView;
 
-        NSStackView contentStack;
-        NSStackView outerStack;
+        public NSView ContentView { get; protected set; }
+
+        NSLayoutConstraint [] playerViewConstraints;
+        NSLayoutConstraint [] contentViewConstraints;
 
         public DetailView (SearchBarView searchBarView, PlayerView playerView)
         {
-            contentStack = new NSStackView ();
-            contentStack.TranslatesAutoresizingMaskIntoConstraints = false;
-            contentStack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            contentStack.SetHuggingPriority ((float)NSLayoutPriority.WindowSizeStayPut, NSLayoutConstraintOrientation.Horizontal);
-            contentStack.Spacing = 0;
-
-            outerStack = new NSStackView ();
-            outerStack.TranslatesAutoresizingMaskIntoConstraints = false;
-            outerStack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            outerStack.SetHuggingPriority ((float)NSLayoutPriority.WindowSizeStayPut, NSLayoutConstraintOrientation.Horizontal);
-            outerStack.Spacing = 0;
-
+            TranslatesAutoresizingMaskIntoConstraints = false;
 
             SearchBarView = searchBarView;
-            contentStack.AddArrangedSubview (searchBarView);
+            SearchBarView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
             PlayerView = playerView;
-            PlayerView.SetContentHuggingPriorityForOrientation ((float)NSLayoutPriority.DefaultHigh, NSLayoutConstraintOrientation.Vertical);
+            PlayerView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
-            outerStack.AddArrangedSubview (contentStack);
-
-            AddSubview (outerStack);
+            AddSubview (SearchBarView);
 
             AddDefaultLayoutConstraints ();
         }
 
         public void ShowPlayerView ()
         {
-            outerStack.AddArrangedSubview (PlayerView);
+            if (PlayerView.Superview == null) {
+                AddSubview (PlayerView);
+
+                if (playerViewConstraints == null) {
+                    CreatePlayerViewConstraints ();
+                }
+
+                AddConstraints (playerViewConstraints);
+            }
         }
 
         public void HidePlayerView ()
         {
-            outerStack.RemoveArrangedSubview (PlayerView);
+            if (PlayerView.Superview == this) {
+                PlayerView.RemoveFromSuperview ();
+                RemoveConstraints (playerViewConstraints);
+            }
         }
 
         public override void ViewDidMoveToWindow ()
@@ -62,17 +63,42 @@ namespace RedditPlayer.Mac.Views.Detail
 
         public void SetContentView (NSView view)
         {
-            if (contentStack.ArrangedSubviews.Length > 1) {
-                contentStack.RemoveArrangedSubview (contentStack.ArrangedSubviews [1]);
+            if (ContentView != null)
+                ContentView.RemoveFromSuperview ();
+
+            if (contentViewConstraints != null) {
+                RemoveConstraints (contentViewConstraints);
             }
 
-            contentStack.AddArrangedSubview (view);
+            AddSubview (view);
+
+            CreateContentViewConstraints (view);
+            AddConstraints (contentViewConstraints);
         }
 
         void AddDefaultLayoutConstraints ()
         {
-            AddConstraints (FillHorizontal (outerStack, false));
-            AddConstraints (FillVertical (outerStack, false));
+            AddConstraint (PinTop (SearchBarView));
+            AddConstraints (FillHorizontal (SearchBarView, false));
+        }
+
+        void CreatePlayerViewConstraints ()
+        {
+            var constraints = new List<NSLayoutConstraint> ();
+            constraints.AddRange (FillHorizontal (PlayerView, false));
+            constraints.Add (PinBottom (PlayerView));
+
+            playerViewConstraints = constraints.ToArray ();
+        }
+
+        void CreateContentViewConstraints (NSView view)
+        {
+            var constraints = new List<NSLayoutConstraint> ();
+            constraints.AddRange (FillHorizontal (view, false));
+            constraints.AddRange (StackVertical (0, SearchBarView, view));
+            constraints.Add (PinBottom (view));
+
+            contentViewConstraints = constraints.ToArray ();
         }
     }
 }

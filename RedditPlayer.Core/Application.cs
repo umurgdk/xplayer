@@ -2,28 +2,40 @@
 using RedditPlayer.Services;
 using System.Reactive.Linq;
 using System.Diagnostics;
+using RedditPlayer.Domain.MediaProviders;
+using Splat;
 namespace RedditPlayer
 {
     public class Application
     {
         public ApplicationViewModel ViewModel { get; protected set; }
-        public INavigator Navigator { get; protected set; }
 
-        public Application(INavigator navigator)
+        public Application (ApplicationViewModel viewModel)
         {
-            Navigator = navigator;
-            ViewModel = new ApplicationViewModel(navigator);
-
-            ViewModel.Search.Search.Select (_ => {
-                Debug.WriteLine ("Searching...");
-                return 1;
-            });
+            ViewModel = viewModel;
         }
 
         public void Start ()
         {
-            Navigator.PresentWelcomeScreen (ViewModel.Search);
-            Navigator.ShowWindow (this);
+            var settings = Locator.CurrentMutable.GetService<ISettings> ();
+
+#if DEBUG
+            settings.RemoveAll ();
+#endif
+
+            if (settings.FirstRun)
+                SetFirstRunSettings (settings);
+
+            var navigator = Locator.CurrentMutable.GetService<INavigator> ();
+            navigator.PresentWelcomeScreen ();
+            navigator.ShowWindow (this);
+        }
+
+        void SetFirstRunSettings (ISettings settings)
+        {
+            Debug.WriteLine ("Setting first run configurations!!!");
+            settings.Volume = 1.0f;
+            settings.FirstRun = false;
         }
     }
 }

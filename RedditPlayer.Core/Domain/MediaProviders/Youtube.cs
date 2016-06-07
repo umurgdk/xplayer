@@ -1,8 +1,6 @@
-﻿using System;
-using Google.Apis.YouTube.v3;
+﻿using Google.Apis.YouTube.v3;
 using Google.Apis.Services;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using RedditPlayer.Domain.Media;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +10,19 @@ namespace RedditPlayer.Domain.MediaProviders
 {
     public class Youtube : IMediaProvider
     {
-        public bool IsSupported => true;
-
-        public readonly static Youtube Instance = new Youtube();
-
         YouTubeService service;
 
-        private Youtube()
+        public IPlayer Player { get; protected set; }
+
+        public Youtube(IPlayer player)
         {
+            Player = player;
+
             service = new YouTubeService(new BaseClientService.Initializer()
             {
                 ApiKey = "AIzaSyB2-jvhH8wLcY1Ao3BRwVIGYGfF8_1CA8U",
                 ApplicationName = "XPlayer"
             });
-        }
-
-        public bool IsValidUrl(string url)
-        {
-            return Regex.IsMatch(url, @"(youtube\.com|youtu\.be)");
         }
 
         public async Task<IList<Track>> GetTrackForId(params string[] ids)

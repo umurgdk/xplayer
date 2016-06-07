@@ -21,27 +21,6 @@ namespace RedditPlayer.Domain.Reddit
 
             return SubReddit.FromJson (jobject);
         }
-
-        public static async Task<List<Track>> GetSubRedditMedias (SubReddit subReddit)
-        {
-            return await GetSubRedditMedias(subReddit.Name);
-        }
-
-        public static async Task<List<Track>> GetSubRedditMedias (string subredditName)
-        {
-            var client = new HttpClient ();
-            var url = SUBREDDIT_URL + subredditName + "/hot.json";
-            var json = await client.GetStringAsync (url);
-
-            var jObject = JObject.Parse (json);
-            var children = jObject ["data"] ["children"].Values<JObject> ();
-
-            return children
-                .Select (child => RedditMedia.FromJson (child))
-                .Where (media => media.Provider.IsSupported)
-                .Select (media => media.AsTrack())
-                .ToList ();
-        }
     }
 }
 

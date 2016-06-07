@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Net.Http;
-using System.Collections.Immutable;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace RedditPlayer.Domain.Reddit
 {
@@ -20,8 +15,6 @@ namespace RedditPlayer.Domain.Reddit
 
         public string Grouping { get; set; } = "Featured";
 
-        public ImmutableDictionary<string, RedditMedia> Medias { get; private set; } = new Dictionary<string, RedditMedia> { }.ToImmutableDictionary ();
-
         public string Key => Url;
 
         public SubReddit ()
@@ -29,12 +22,11 @@ namespace RedditPlayer.Domain.Reddit
 
         }
 
-        public SubReddit (SubReddit oldSubReddit, ImmutableDictionary<string, RedditMedia> newMedias)
+        public SubReddit (SubReddit oldSubReddit)
         {
             Name = oldSubReddit.Name;
             Url = oldSubReddit.Url;
             Title = oldSubReddit.Title;
-            Medias = newMedias;
         }
 
         internal static SubReddit FromJson (JObject jObject)
@@ -48,42 +40,14 @@ namespace RedditPlayer.Domain.Reddit
             };
         }
 
-        public SubReddit AddDistinctMedias (IEnumerable<RedditMedia> newMedias)
-        {
-            var finalMedias = Medias;
-            foreach (var item in newMedias) {
-                if (finalMedias.ContainsKey (item.Key)) {
-                    finalMedias = finalMedias.SetItem (item.Key, item);
-                } else {
-                    finalMedias = finalMedias.Add (item.Key, item);
-                }
-            }
-
-            return new SubReddit (this, finalMedias);
-        }
-
-        public SubReddit SetMedias (ImmutableDictionary<string, RedditMedia> newMedias)
-        {
-            return new SubReddit (this, newMedias);
-        }
-
-        public SubReddit UpsertMedia (RedditMedia newMedia)
-        {
-            if (Medias.ContainsValue (newMedia)) {
-                return SetMedias (Medias.SetItem (newMedia.Key, newMedia));
-            }
-
-            return SetMedias (Medias.Add (newMedia.Key, newMedia));
-        }
-
         public override int GetHashCode ()
         {
-            return (Name + Url + Title).GetHashCode () + Medias.GetHashCode ();
+            return (Name + Url + Title).GetHashCode ();
         }
 
         public bool Equals (SubReddit other)
         {
-            return Name == other.Name && Url == other.Url && Title == other.Title && Medias == other.Medias;
+            return Name == other.Name && Url == other.Url && Title == other.Title;
         }
     }
 }

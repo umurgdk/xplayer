@@ -148,18 +148,22 @@
     <ImageAsset Include="Assets.xcassets\Forward.imageset\Forward%402x.png" />
     <ImageAsset Include="Assets.xcassets\Forward.imageset\Forward%403x.png" />
     <ImageAsset Include="Assets.xcassets\Speaker.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker.png" />
-    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%402x.png" />
-    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%403x.png" />
     <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud.png" />
-    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%402x.png" />
-    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%403x.png" />
     <ImageAsset Include="Assets.xcassets\Image-1.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig.png" />
     <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig%402x.png" />
     <ImageAsset Include="Assets.xcassets\RedditIconBig.imageset\RedditIconBig%403x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker.png" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Speaker.imageset\Speaker%403x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%402x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerLoud.imageset\SpeakerLoud%403x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted%402x.png" />
+    <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -183,11 +187,19 @@
     <Folder Include="Views\SongsList\" />
     <Folder Include="Views\SearchResults\" />
     <Folder Include="Assets.xcassets\RedditIconBig.imageset\" />
+    <Folder Include="Players\" />
+    <Folder Include="Services\" />
+    <Folder Include="Assets.xcassets\SpeakerMuted.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
+    <None Include="Views\SongsList\SongsListView.cs" />
+    <None Include="Views\SongsList\SongView.cs" />
+    <None Include="Views\SongsList\SongRowView.cs" />
+    <None Include="Views\Playlists\PlaylistDetailView.cs" />
+    <None Include="Views\Playlists\PlaylistDetailViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -213,13 +225,7 @@
     <Compile Include="Extensions\NSButtonExtensions.cs" />
     <Compile Include="Views\Player\PlayerControlsView.cs" />
     <Compile Include="Views\Player\SoundControlView.cs" />
-    <Compile Include="Views\SongsList\SongsListView.cs" />
-    <Compile Include="Views\SongsList\SongView.cs" />
     <Compile Include="DataAdapters\GenericTableViewSource.cs" />
-    <Compile Include="Views\SongsList\SongThumbnailView.cs" />
-    <Compile Include="Views\SongsList\SongRowView.cs" />
-    <Compile Include="Views\Playlists\PlaylistDetailView.cs" />
-    <Compile Include="Views\Playlists\PlaylistDetailViewController.cs" />
     <Compile Include="Views\SearchResults\SearchResultHeaderView.cs" />
     <Compile Include="Views\SearchResults\SearchResultSongView.cs" />
     <Compile Include="Views\SearchResults\SearchResultsViewController.cs" />
@@ -233,6 +239,15 @@
     <Compile Include="Views\Navigator.cs" />
     <Compile Include="Views\MainViewController.cs" />
     <Compile Include="Views\Player\PlayerViewController.cs" />
+    <Compile Include="Views\FlippedView.cs" />
+    <Compile Include="Players\YoutubePlayer.cs" />
+    <Compile Include="Views\SongsList\SongThumbnailView.cs" />
+    <Compile Include="SharedTimer.cs" />
+    <Compile Include="Views\Player\PlayerProgress.cs" />
+    <Compile Include="Services\VolumeService.cs" />
+    <Compile Include="Services\Settings.cs" />
+    <Compile Include="Extensions\NSBezierPathExtensions.cs" />
+    <Compile Include="Extensions\CAAnimationCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
@@ -245,6 +260,7 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\windowbg.jpg" />
+    <BundleResource Include="Resources\YoutubePlayer.js" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

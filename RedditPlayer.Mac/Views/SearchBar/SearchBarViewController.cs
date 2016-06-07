@@ -37,7 +37,7 @@ namespace RedditPlayer.Mac.Views.SearchBar
         {
             if (viewModel.Search.CanExecute(null))
             {
-                viewModel.Search.Execute (null);
+                viewModel.Search.ExecuteAsyncTask (null);
                 View.Window.MakeFirstResponder (null);
             }
         }
