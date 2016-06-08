@@ -11,5 +11,6 @@ namespace RedditPlayer.Domain.Media
         void Mute ();
         void Unmute ();
         void SetVolume (float volume);
+        void Seek (float progress);
     }
 }

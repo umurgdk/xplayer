@@ -98,6 +98,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ReactiveUI.Fody.Helpers">
+      <HintPath>..\packages\ReactiveUI.Fody.1.1.51\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\ReactiveUI.Fody.Helpers.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
@@ -200,6 +203,7 @@
     <None Include="Views\SongsList\SongRowView.cs" />
     <None Include="Views\Playlists\PlaylistDetailView.cs" />
     <None Include="Views\Playlists\PlaylistDetailViewController.cs" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -248,6 +252,7 @@
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Extensions\NSBezierPathExtensions.cs" />
     <Compile Include="Extensions\CAAnimationCollection.cs" />
+    <Compile Include="Views\Player\PlayerProgressControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
@@ -264,6 +269,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('..\packages\Fody.1.28.3\build\Fody.targets')" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>

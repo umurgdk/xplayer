@@ -6,6 +6,7 @@ using RedditPlayer.Services;
 using Splat;
 using System.Reactive.Linq;
 using System.Diagnostics;
+using System.Reactive;
 namespace RedditPlayer.ViewModels
 {
     public class PlayerViewModel : ReactiveObject
@@ -80,7 +81,6 @@ namespace RedditPlayer.ViewModels
         {
             CurrentTrack?.Provider.Player.Pause ();
             Playing = false;
-            timer.Stop ();
         }
 
         public void ToggleMute ()
@@ -92,6 +92,12 @@ namespace RedditPlayer.ViewModels
             } else {
                 CurrentTrack?.Provider.Player.Unmute ();
             }
+        }
+
+        public void Seek (float progress)
+        {
+            Progress = progress;
+            CurrentTrack?.Provider.Player.Seek (progress);
         }
 
         void SetPlayerVolume (float volume)

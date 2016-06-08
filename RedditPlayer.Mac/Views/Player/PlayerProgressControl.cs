@@ -6,11 +6,21 @@ using Foundation;
 using System.Diagnostics;
 using static RedditPlayer.Mac.Extensions.NSBezierPathExtensions;
 using RedditPlayer.Mac.Extensions;
+using ReactiveUI;
+using System.ComponentModel;
+using ReactiveUI.Fody.Helpers;
+using System.Reactive.Linq;
 
 namespace RedditPlayer.Mac.Views.Player
 {
-    public class PlayerProgress : NSView, ICALayerDelegate
+    public class PlayerProgressControl : NSControl, ICALayerDelegate, IReactiveObject
     {
+        [Reactive]
+        public bool IsDragging { get; protected set; }
+
+        public event ReactiveUI.PropertyChangingEventHandler PropertyChanging;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         float progress = 0.0f;
         public float Progress
         {
@@ -21,8 +31,7 @@ namespace RedditPlayer.Mac.Views.Player
 
             set
             {
-                progress = value;
-                NeedsDisplay = true;
+                this.RaiseAndSetIfChanged (ref progress, value);
             }
         }
 
@@ -66,6 +75,7 @@ namespace RedditPlayer.Mac.Views.Player
             {
                 base.Frame = value;
                 NeedsDisplay = true;
+                animateChanges = false;
             }
         }
 
@@ -76,7 +86,7 @@ namespace RedditPlayer.Mac.Views.Player
         public override bool AcceptsFirstMouse (NSEvent theEvent) => true;
 
         bool showProgressHandle;
-        bool draggingHandle;
+        bool animateChanges = true;
 
         NSTrackingArea trackingArea;
 
@@ -84,10 +94,7 @@ namespace RedditPlayer.Mac.Views.Player
         CALayer backgroundLayer;
         CALayer filledLayer;
 
-        CABasicAnimation scaleUp;
-        CABasicAnimation scaleDown;
-
-        public PlayerProgress ()
+        public PlayerProgressControl ()
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -109,11 +116,15 @@ namespace RedditPlayer.Mac.Views.Player
             Layer.AddSublayer (backgroundLayer);
             Layer.AddSublayer (filledLayer);
             Layer.AddSublayer (progressHandleLayer);
+
+            this.WhenAnyValue (control => control.Progress)
+                .DistinctUntilChanged ()
+                .Subscribe (_ => NeedsDisplay = true);
         }
 
         public override void MouseEntered (NSEvent theEvent)
         {
-            if (!draggingHandle) {
+            if (!IsDragging) {
                 showProgressHandle = true;
                 NeedsDisplay = true;
             }
@@ -121,23 +132,49 @@ namespace RedditPlayer.Mac.Views.Player
 
         public override void MouseExited (NSEvent theEvent)
         {
-            if (!draggingHandle) {
+            if (!IsDragging) {
                 showProgressHandle = false;
                 NeedsDisplay = true;
             }
         }
 
-        public override void MouseDown (NSEvent theEvent)
+        float CalculateProgressFromMouseEvent (NSEvent theEvent)
         {
-            Console.WriteLine ("Frame.Left =  {0}", Frame.Left);
-            draggingHandle = true;
-            showProgressHandle = true;
+            var dragLocation = ConvertPointFromView (theEvent.LocationInWindow, null);
+            var fromLeft = Math.Min (dragLocation.X - Frame.Left, Frame.Width);
+            var calculatedProgress = (float)(fromLeft / Frame.Width);
+
+            return calculatedProgress;
         }
 
-        public override void MouseUp (NSEvent theEvent)
+        public override void MouseDown (NSEvent theEvent)
         {
-            draggingHandle = false;
-            NeedsDisplay = true;
+            var loop = true;
+            while (loop) {
+                var localEvent = Window.NextEventMatchingMask (NSEventMask.LeftMouseUp | NSEventMask.LeftMouseDragged);
+
+                switch (localEvent.Type) {
+                case NSEventType.LeftMouseDragged:
+                    IsDragging = true;
+
+                    animateChanges = false;
+                    Progress = CalculateProgressFromMouseEvent (localEvent);
+
+                    break;
+
+                case NSEventType.LeftMouseUp:
+                    loop = false;
+                    showProgressHandle = IsMouseInRect (localEvent.LocationInWindow, Frame);
+
+                    IsDragging = false;
+                    Progress = CalculateProgressFromMouseEvent (localEvent);
+                    break;
+
+                default:
+                    IsDragging = false;
+                    break;
+                }
+            }
         }
 
         public override void UpdateTrackingAreas ()
@@ -148,22 +185,44 @@ namespace RedditPlayer.Mac.Views.Player
             var trackingRect = Bounds;
             trackingRect.Inflate (4, 4);
 
-            trackingArea = new NSTrackingArea (trackingRect, NSTrackingAreaOptions.MouseEnteredAndExited | NSTrackingAreaOptions.MouseMoved | NSTrackingAreaOptions.EnabledDuringMouseDrag | NSTrackingAreaOptions.ActiveInKeyWindow, this, null);
+            trackingArea = new NSTrackingArea (trackingRect, NSTrackingAreaOptions.MouseEnteredAndExited | NSTrackingAreaOptions.ActiveInKeyWindow, this, null);
             AddTrackingArea (trackingArea);
         }
 
         public override void UpdateLayer ()
         {
+            if (!animateChanges) {
+                CATransaction.Begin ();
+                CATransaction.DisableActions = true;
+            }
+
             var width = Layer.Bounds.Width;
+
             var progressX = Layer.Bounds.Width * progress;
             var midY = Layer.Bounds.GetMidY ();
 
             backgroundLayer.Frame = new CGRect (0, midY - 1, Layer.Bounds.Width, 3.0f);
             filledLayer.Frame = new CGRect (0, midY - 1, progressX, 3.0f);
 
-            progressHandleLayer.Opacity = (showProgressHandle || draggingHandle ? 1 : 0);
+            progressHandleLayer.Opacity = (showProgressHandle || IsDragging ? 1 : 0);
 
             progressHandleLayer.Position = new CGPoint (progressX, midY);
+
+            if (!animateChanges) {
+                CATransaction.Commit ();
+            }
+
+            animateChanges = true;
+        }
+
+        public void RaisePropertyChanging (ReactiveUI.PropertyChangingEventArgs args)
+        {
+            PropertyChanging?.Invoke (this, args);
+        }
+
+        public void RaisePropertyChanged (PropertyChangedEventArgs args)
+        {
+            PropertyChanged?.Invoke (this, args);
         }
     }
 }

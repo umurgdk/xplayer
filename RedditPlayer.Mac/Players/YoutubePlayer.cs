@@ -100,23 +100,22 @@ namespace RedditPlayer.Mac.Players
 
         public void Mute ()
         {
-            if (webView != null) {
-                webView.WindowScriptObject.EvaluateWebScript ("mute()");
-            }
+            webView?.WindowScriptObject.EvaluateWebScript ("mute()");
         }
 
         public void Unmute ()
         {
-            if (webView != null) {
-                webView.WindowScriptObject.EvaluateWebScript ("unmute()");
-            }
+            webView?.WindowScriptObject.EvaluateWebScript ("unmute()");
         }
 
         public void SetVolume (float volume)
         {
-            if (webView != null) {
-                webView.WindowScriptObject.EvaluateWebScript ($"setVolume({volume})");
-            }
+            webView?.WindowScriptObject.EvaluateWebScript ($"setVolume({volume})");
+        }
+
+        public void Seek (float progress)
+        {
+            webView?.WindowScriptObject.EvaluateWebScript ($"seek({progress})");
         }
     }
 }

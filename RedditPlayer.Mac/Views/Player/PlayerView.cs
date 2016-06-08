@@ -15,7 +15,7 @@ namespace RedditPlayer.Mac.Views.Player
         public readonly PlayerControlsView PlayerControls;
         public readonly SoundControlView SoundControl;
         public readonly NSTextField SongTitle;
-        public readonly PlayerProgress Progress;
+        public readonly PlayerProgressControl Progress;
 
         public override CGSize IntrinsicContentSize => new CGSize (300, DefaultHeight);
 
@@ -38,7 +38,7 @@ namespace RedditPlayer.Mac.Views.Player
             SongTitle.Alignment = NSTextAlignment.Center;
             SongTitle.TextColor = NSColor.FromRgb (84, 84, 84);
 
-            Progress = new PlayerProgress ();
+            Progress = new PlayerProgressControl ();
 
             AddSubview (Progress);
             AddSubview (CoverImage);
@@ -60,7 +60,7 @@ namespace RedditPlayer.Mac.Views.Player
             AddConstraint (FixedHeight (this, DefaultHeight));
 
             // Song title
-            AddConstraint (PinCenterY (SongTitle));
+            AddConstraint (PinCenterY (SongTitle, this, 3));
 
             // Cover image layout
             AddConstraint (FixedHeight (CoverImage, SafeHeight));

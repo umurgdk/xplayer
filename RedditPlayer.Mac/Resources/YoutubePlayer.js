@@ -71,6 +71,11 @@ var unmute = makeOnReady(function () {
     player.unMute();
 });
 
+var seek = makeOnReady(function (progress) {
+    var duration = player.getDuration();
+    player.seekTo(duration * progress, true);
+});
+
 var isMuted = function () {
     if (!playerReady) {
         return false;

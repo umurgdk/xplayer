@@ -44,9 +44,6 @@ namespace RedditPlayer.Mac.Views.Player
                          }
                      });
 
-            viewModel.WhenAnyValue (vm => vm.Progress)
-                     .BindTo (View.Progress, progress => progress.Progress);
-
             var mutedObservable = viewModel.WhenAnyValue (vm => vm.Muted);
 
             viewModel.WhenAnyValue (vm => vm.Volume)
@@ -59,6 +56,30 @@ namespace RedditPlayer.Mac.Views.Player
             View.PlayerControls.PauseButton.Activated += (sender, e) => viewModel.Pause ();
             View.SoundControl.VolumeSlider.Activated += (sender, e) => viewModel.Volume = (sender as NSSlider).FloatValue;
             View.SoundControl.MuteButton.Activated += (sender, e) => viewModel.ToggleMute ();
+
+            var progressObservable = View.Progress
+                .WhenAnyValue (p => p.Progress);
+
+            progressObservable
+                .Where (_ => !View.Progress.IsDragging)
+                .BindTo (viewModel, vm => vm.Progress);
+
+            progressObservable
+                .Where (_ => View.Progress.IsDragging)
+                .Throttle (TimeSpan.FromMilliseconds (100), RxApp.MainThreadScheduler)
+                .Subscribe (progress => viewModel.Seek (progress));
+
+            var draggingObservable = View.Progress.WhenAnyValue (p => p.IsDragging);
+
+            var updateProgress = true;
+            viewModel.WhenAnyValue (vm => vm.Progress)
+                     .Where (_ => !View.Progress.IsDragging)
+                     .DistinctUntilChanged ()
+                     .Subscribe (progress => View.Progress.Progress = progress);
+
+            View.Progress
+                .WhenAnyValue (vm => vm.IsDragging)
+                .Subscribe (dragging => updateProgress = !dragging);
         }
 
         void UpdateTrackInformation (Track track)
