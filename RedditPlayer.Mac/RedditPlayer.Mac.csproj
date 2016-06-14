@@ -240,10 +240,6 @@
     <Compile Include="Views\Player\PlayerControlsView.cs" />
     <Compile Include="Views\Player\SoundControlView.cs" />
     <Compile Include="DataAdapters\GenericTableViewSource.cs" />
-    <Compile Include="Views\SearchResults\SearchResultHeaderView.cs" />
-    <Compile Include="Views\SearchResults\SearchResultSongView.cs" />
-    <Compile Include="Views\SearchResults\SearchResultsViewController.cs" />
-    <Compile Include="Views\SearchResults\SearchResultsView.cs" />
     <Compile Include="DataAdapters\SearchResultsTableSource.cs" />
     <Compile Include="DataAdapters\ISelectableView.cs" />
     <Compile Include="Views\RPTableView.cs" />
@@ -275,9 +271,6 @@
     <Compile Include="Views\Detail\DetailNibController.designer.cs">
       <DependentUpon>DetailNibController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\SearchResults\SearchResultsNormalView.cs" />
-    <Compile Include="Views\SearchResults\SearchResultsSongsSource.cs" />
-    <Compile Include="Views\SearchResults\SearchResultsNormalViewController.cs" />
     <Compile Include="Views\SearchResults\SearchResultsXib.cs" />
     <Compile Include="Views\SearchResults\SearchResultsXibController.cs" />
     <Compile Include="Views\SearchResults\SearchResultsXib.designer.cs">
@@ -286,18 +279,18 @@
     <Compile Include="Views\SearchResults\SearchResultsXibController.designer.cs">
       <DependentUpon>SearchResultsXibController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\SearchResults\TrackResult.cs" />
-    <Compile Include="Views\SearchResults\TrackResult.designer.cs">
-      <DependentUpon>TrackResult.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\SearchResults\SearchResultsTabGroup.cs" />
     <Compile Include="Views\SearchResults\SearchResultsTabView.cs" />
+    <Compile Include="Views\SearchResults\ArtistItemView.cs" />
+    <Compile Include="Views\SearchResults\ArtistItemView.designer.cs">
+      <DependentUpon>ArtistItemView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
     <InterfaceDefinition Include="Views\Detail\DetailNib.xib" />
     <InterfaceDefinition Include="Views\SearchResults\SearchResultsXib.xib" />
-    <InterfaceDefinition Include="Views\SearchResults\TrackResult.xib" />
+    <InterfaceDefinition Include="Views\SearchResults\ArtistItemView.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">

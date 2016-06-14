@@ -14,8 +14,9 @@ namespace RedditPlayer.Domain.MediaProviders
     {
         IPlayer Player { get; }
 
-        Task<IList<Track>> GetTrackForId (params string[] ids);
+        Task<IList<Track>> GetTrackForId(params string[] ids);
         Task<IList<Track>> SearchTracks(string query);
+        Task<IList<Artist>> SearchArtists(string query);
     }
 }
 

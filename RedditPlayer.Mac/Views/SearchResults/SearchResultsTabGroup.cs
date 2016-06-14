@@ -13,7 +13,8 @@ namespace RedditPlayer.Mac.Views.SearchResults
         Dictionary<string, SearchResultsTabView> tabViews;
         string activeTabIdentifier;
 
-        NSTrackingArea trackingArea;
+        public delegate void ActiveTabChangedHandler (string identifier);
+        public event ActiveTabChangedHandler ActiveTabChanged;
 
         #region Constructors
 
@@ -91,6 +92,7 @@ namespace RedditPlayer.Mac.Views.SearchResults
                 if (tab.Key == identifier) {
                     tab.Value.Selected = true;
                     activeTabIdentifier = identifier;
+                    ActiveTabChanged?.Invoke (identifier);
                 } else {
                     tab.Value.Selected = false;
                 }

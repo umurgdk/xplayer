@@ -30,14 +30,14 @@ namespace RedditPlayer.ViewModels
 
         public SearchViewModel()
         {
-            Tracks = new ReactiveList<Track> ();
-            Artists = new ReactiveList<Artist> ();
-            Albums = new ReactiveList<Album> ();
+            Tracks = new ReactiveList<Track>();
+            Artists = new ReactiveList<Artist>();
+            Albums = new ReactiveList<Album>();
 
             searchTracks = ReactiveCommand.CreateAsyncTask(ImplSearchTracks);
-            searchTracks.Subscribe(tracks => 
+            searchTracks.Subscribe(tracks =>
             {
-                using (Tracks.SuppressChangeNotifications()) 
+                using (Tracks.SuppressChangeNotifications())
                 {
                     Tracks.Clear();
                     Tracks.AddRange(tracks);
@@ -45,9 +45,9 @@ namespace RedditPlayer.ViewModels
             });
 
             searchArtists = ReactiveCommand.CreateAsyncTask(ImplSearchArtists);
-            searchArtists.Subscribe(artists => 
+            searchArtists.Subscribe(artists =>
             {
-                using (Artists.SuppressChangeNotifications()) 
+                using (Artists.SuppressChangeNotifications())
                 {
                     Artists.Clear();
                     Artists.AddRange(artists);
@@ -83,13 +83,13 @@ namespace RedditPlayer.ViewModels
 
         void SearchCompleted()
         {
-            var navigator = Locator.CurrentMutable.GetService<INavigator> ();
-            navigator.PresentSearchResults ();
+            var navigator = Locator.CurrentMutable.GetService<INavigator>();
+            navigator.PresentSearchResults();
         }
 
         async Task<IEnumerable<Track>> ImplSearchTracks(object arg)
         {
-            var mediaProviders = Locator.CurrentMutable.GetService<IMediaProvider []> ();
+            var mediaProviders = Locator.CurrentMutable.GetService<IMediaProvider[]>();
 
             var trackTasks = mediaProviders.Select(provider => provider.SearchTracks(Query));
             var trackResults = await Task.WhenAll(trackTasks);
@@ -99,13 +99,18 @@ namespace RedditPlayer.ViewModels
 
         async Task<IEnumerable<Artist>> ImplSearchArtists(object arg)
         {
-            return new List<Artist>();
+            var mediaProviders = Locator.CurrentMutable.GetService<IMediaProvider[]>();
+
+            var artistTasks = mediaProviders.Select(provider => provider.SearchArtists(Query));
+            var artistResults = await Task.WhenAll(artistTasks);
+
+            return artistResults.SelectMany(x => x);
         }
 
         async Task<IEnumerable<Album>> ImplSearchAlbums(object arg)
         {
             return new List<Album>();
         }
-   }
+    }
 }
 

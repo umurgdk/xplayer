@@ -18,7 +18,7 @@ namespace RedditPlayer.Mac.Views
         DetailViewController detailViewController;
         MainViewController mainViewController;
         PlaylistsViewController playlistViewController;
-        SearchResultsNormalViewController searchResultsViewController;
+        SearchResultsXibController searchResultsViewController;
 
         ApplicationViewModel appModel;
 
@@ -44,15 +44,10 @@ namespace RedditPlayer.Mac.Views
         public void PresentSearchResults ()
         {
             if (searchResultsViewController == null) {
-                searchResultsViewController = new SearchResultsNormalViewController (appModel);
+                searchResultsViewController = new SearchResultsXibController (appModel);
             }
 
-            var controller = new SearchResultsXibController (appModel);
-            detailViewController.SetContentView (controller.View);
-
-            //var nibController = new DetailNibController ();
-
-
+            detailViewController.SetContentView (searchResultsViewController.View);
             windowController.PresentView (detailViewController.View);
         }
 

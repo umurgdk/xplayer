@@ -10,7 +10,7 @@ using RedditPlayer.Mac.Views.SongsList;
 
 namespace RedditPlayer.Mac.Views.SearchResults
 {
-    public partial class SearchResultsXibController : ReactiveViewController, INSTableViewDelegate, INSTableViewDataSource
+    public partial class SearchResultsXibController : ReactiveViewController, INSTableViewDelegate, INSTableViewDataSource, INSCollectionViewDataSource
     {
         ApplicationViewModel viewModel;
 
@@ -34,6 +34,11 @@ namespace RedditPlayer.Mac.Views.SearchResults
         {
             Initialize ();
             this.viewModel = viewModel;
+
+            viewModel.Search.Tracks.Changed.Subscribe (_ => tableView.ReloadData ());
+            viewModel.Search.Artists.Changed.Subscribe (_ => {
+                artistsCollectionView.ReloadData ();
+            });
         }
 
         // Shared initialization code
@@ -62,12 +67,18 @@ namespace RedditPlayer.Mac.Views.SearchResults
             tableView.ReloadData ();
             tableView.DoubleClick += TableDoubleClicked;
 
-            viewModel.Search.Tracks.Changed.Subscribe (_ => tableView.ReloadData ());
-
             tabGroup.AddTab ("songs", "Playlist", "Tracks");
             tabGroup.AddTab ("videos", "Video", "Videos");
             tabGroup.AddTab ("artists", "Artist", "Artists");
+
+            tabGroup.ActiveTabChanged += OnActiveTabChanged;
+
             tabGroup.ActivateTab ("songs");
+
+            artistsCollectionView.RegisterNib (new NSNib ("ArtistItemView", NSBundle.MainBundle), "ArtistItemView");
+            artistsCollectionView.RegisterClassForItem (typeof (ArtistItemView), "ArtistItemView");
+
+            artistsCollectionView.ReloadData ();
         }
 
         [Export ("numberOfRowsInTableView:")]
@@ -114,6 +125,39 @@ namespace RedditPlayer.Mac.Views.SearchResults
             if (row < viewModel.Search.Tracks.Count) {
                 viewModel.Player.Play (viewModel.Search.Tracks [row]);
             }
+        }
+
+        void OnActiveTabChanged (string identifier)
+        {
+            tabView.Select (new NSString (identifier));
+
+            if (identifier == "artists")
+                artistsCollectionView.ReloadData ();
+        }
+
+        [Export ("numberOfSectionsInCollectionView:")]
+        public nint GetNumberOfSections (NSCollectionView collectionView)
+        {
+            return 1;
+        }
+
+        [Export ("collectionView:numberOfItemsInSection:")]
+        public nint GetNumberofItems (NSCollectionView collectionView, nint section)
+        {
+            return viewModel.Search.Artists.Count;
+        }
+
+        [Export ("collectionView:itemForRepresentedObjectAtIndexPath:")]
+        public NSCollectionViewItem GetItem (NSCollectionView collectionView, NSIndexPath indexPath)
+        {
+            var item = collectionView.MakeItem ("ArtistItemView", indexPath) as ArtistItemView;
+
+            var artist = viewModel.Search.Artists [(int)indexPath.Item];
+
+            item.ThumbnailView.SetImageAsync (artist.PictureUrl);
+            item.TextField.StringValue = artist.Name;
+
+            return item;
         }
     }
 }

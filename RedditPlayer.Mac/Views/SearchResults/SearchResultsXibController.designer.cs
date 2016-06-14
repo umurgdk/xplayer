@@ -13,21 +13,37 @@ namespace RedditPlayer.Mac.Views.SearchResults
 	partial class SearchResultsXibController
 	{
 		[Outlet]
+		AppKit.NSCollectionView artistsCollectionView { get; set; }
+
+		[Outlet]
 		RedditPlayer.Mac.Views.SearchResults.SearchResultsTabGroup tabGroup { get; set; }
 
 		[Outlet]
 		AppKit.NSTableView tableView { get; set; }
+
+		[Outlet]
+		AppKit.NSTabView tabView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (tabGroup != null) {
+				tabGroup.Dispose ();
+				tabGroup = null;
+			}
+
+			if (tabView != null) {
+				tabView.Dispose ();
+				tabView = null;
+			}
+
 			if (tableView != null) {
 				tableView.Dispose ();
 				tableView = null;
 			}
 
-			if (tabGroup != null) {
-				tabGroup.Dispose ();
-				tabGroup = null;
+			if (artistsCollectionView != null) {
+				artistsCollectionView.Dispose ();
+				artistsCollectionView = null;
 			}
 		}
 	}
