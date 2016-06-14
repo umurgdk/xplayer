@@ -14,6 +14,7 @@ namespace RedditPlayer.Mac.Views
             SetFrame (new CGRect (screenFrame.GetMidX () - 400, screenFrame.GetMidY () - 300, 800, 600), false);
             StyleMask = NSWindowStyle.Resizable | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable | NSWindowStyle.Titled;
             BackgroundColor = NSColor.White;
+            ContentView.WantsLayer = true;
         }
     }
 }

@@ -167,6 +167,14 @@
     <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted.png" />
     <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted%402x.png" />
     <ImageAsset Include="Assets.xcassets\SpeakerMuted.imageset\SpeakerMuted%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Video.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Video.imageset\Video.png" />
+    <ImageAsset Include="Assets.xcassets\Video.imageset\Video%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Video.imageset\Video%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Artist.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist.png" />
+    <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist%402x.png" />
+    <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -193,6 +201,8 @@
     <Folder Include="Players\" />
     <Folder Include="Services\" />
     <Folder Include="Assets.xcassets\SpeakerMuted.imageset\" />
+    <Folder Include="Assets.xcassets\Video.imageset\" />
+    <Folder Include="Assets.xcassets\Artist.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -253,9 +263,41 @@
     <Compile Include="Extensions\NSBezierPathExtensions.cs" />
     <Compile Include="Extensions\CAAnimationCollection.cs" />
     <Compile Include="Views\Player\PlayerProgressControl.cs" />
+    <Compile Include="Players\SoundcloudPlayer.cs" />
+    <Compile Include="Extensions\NSViewExtensions.cs" />
+    <Compile Include="Extensions\NSImageViewExtensions.cs" />
+    <Compile Include="Views\FlippedClipView.cs" />
+    <Compile Include="Views\Detail\DetailNib.cs" />
+    <Compile Include="Views\Detail\DetailNibController.cs" />
+    <Compile Include="Views\Detail\DetailNib.designer.cs">
+      <DependentUpon>DetailNib.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Detail\DetailNibController.designer.cs">
+      <DependentUpon>DetailNibController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResults\SearchResultsNormalView.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsSongsSource.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsNormalViewController.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsXib.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsXibController.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsXib.designer.cs">
+      <DependentUpon>SearchResultsXib.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResults\SearchResultsXibController.designer.cs">
+      <DependentUpon>SearchResultsXibController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResults\TrackResult.cs" />
+    <Compile Include="Views\SearchResults\TrackResult.designer.cs">
+      <DependentUpon>TrackResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResults\SearchResultsTabGroup.cs" />
+    <Compile Include="Views\SearchResults\SearchResultsTabView.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
+    <InterfaceDefinition Include="Views\Detail\DetailNib.xib" />
+    <InterfaceDefinition Include="Views\SearchResults\SearchResultsXib.xib" />
+    <InterfaceDefinition Include="Views\SearchResults\TrackResult.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">

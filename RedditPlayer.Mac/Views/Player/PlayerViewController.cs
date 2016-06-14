@@ -69,23 +69,18 @@ namespace RedditPlayer.Mac.Views.Player
                 .Throttle (TimeSpan.FromMilliseconds (100), RxApp.MainThreadScheduler)
                 .Subscribe (progress => viewModel.Seek (progress));
 
-            var draggingObservable = View.Progress.WhenAnyValue (p => p.IsDragging);
-
-            var updateProgress = true;
             viewModel.WhenAnyValue (vm => vm.Progress)
                      .Where (_ => !View.Progress.IsDragging)
                      .DistinctUntilChanged ()
                      .Subscribe (progress => View.Progress.Progress = progress);
-
-            View.Progress
-                .WhenAnyValue (vm => vm.IsDragging)
-                .Subscribe (dragging => updateProgress = !dragging);
         }
 
         void UpdateTrackInformation (Track track)
         {
             View.SongTitle.StringValue = track.Title;
-            View.CoverImage.Image = new NSImage (NSUrl.FromString (track.CoverUrl));
+
+            if (track.CoverUrl != null)
+                View.CoverImage.Image = new NSImage (NSUrl.FromString (track.CoverUrl));
         }
     }
 }

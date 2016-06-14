@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RedditPlayer.Domain.Media;
@@ -6,25 +7,38 @@ using RedditPlayer.Domain.Reddit;
 
 namespace RedditPlayer.Domain.MediaProviders
 {
-    //public class Soundcloud : IMediaProvider
-    //{
-    //    public bool IsSupported => true;
+    public class Soundcloud : IMediaProvider
+    {
+        public bool IsSupported => true;
 
-    //    private readonly ISoundcloudApi Api;
+        public IPlayer Player { get; protected set; }
 
-    //    public Soundcloud (ISoundcloudApi api)
-    //    {
-    //        Api = api;
-    //    }
+        readonly SoundcloudApi Api;
 
-    //    public bool IsValidUrl (string url)
-    //    {
-    //        return Regex.IsMatch (url, "soundcloud");
-    //    }
+        public Soundcloud (SoundcloudApi api, IPlayer player)
+        {
+            Player = player;
+            Api = api;
+        }
 
-    //    public Task<ITrack> GetTrakForUrl (string url)
-    //    {
-    //        return null;
-    //    }
-    //}
+        public bool IsValidUrl (string url)
+        {
+            return Regex.IsMatch (url, "soundcloud");
+        }
+
+        public Task<ITrack> GetTrakForUrl (string url)
+        {
+            return null;
+        }
+
+        public Task<IList<Track>> GetTrackForId (params string [] ids)
+        {
+            throw new NotImplementedException ();
+        }
+
+        public async Task<IList<Track>> SearchTracks (string query)
+        {
+            return await Api.SearchTracks (this, query);
+        }
+    }
 }

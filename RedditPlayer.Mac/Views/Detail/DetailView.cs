@@ -17,12 +17,12 @@ namespace RedditPlayer.Mac.Views.Detail
 
         public NSView ContentView { get; protected set; }
 
-        NSLayoutConstraint [] playerViewConstraints;
         NSLayoutConstraint [] contentViewConstraints;
 
         public DetailView (SearchBarView searchBarView, PlayerView playerView)
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
+            WantsLayer = true;
 
             SearchBarView = searchBarView;
             SearchBarView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
@@ -31,29 +31,9 @@ namespace RedditPlayer.Mac.Views.Detail
             PlayerView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
             AddSubview (SearchBarView);
+            AddSubview (PlayerView);
 
             AddDefaultLayoutConstraints ();
-        }
-
-        public void ShowPlayerView ()
-        {
-            if (PlayerView.Superview == null) {
-                AddSubview (PlayerView);
-
-                if (playerViewConstraints == null) {
-                    CreatePlayerViewConstraints ();
-                }
-
-                AddConstraints (playerViewConstraints);
-            }
-        }
-
-        public void HidePlayerView ()
-        {
-            if (PlayerView.Superview == this) {
-                PlayerView.RemoveFromSuperview ();
-                RemoveConstraints (playerViewConstraints);
-            }
         }
 
         public override void ViewDidMoveToWindow ()
@@ -63,6 +43,9 @@ namespace RedditPlayer.Mac.Views.Detail
 
         public void SetContentView (NSView view)
         {
+            if (view == ContentView)
+                return;
+
             if (ContentView != null)
                 ContentView.RemoveFromSuperview ();
 
@@ -70,7 +53,9 @@ namespace RedditPlayer.Mac.Views.Detail
                 RemoveConstraints (contentViewConstraints);
             }
 
-            AddSubview (view);
+            ContentView = view;
+
+            AddSubview (view, NSWindowOrderingMode.Below, SearchBarView);
 
             CreateContentViewConstraints (view);
             AddConstraints (contentViewConstraints);
@@ -80,15 +65,9 @@ namespace RedditPlayer.Mac.Views.Detail
         {
             AddConstraint (PinTop (SearchBarView));
             AddConstraints (FillHorizontal (SearchBarView, false));
-        }
 
-        void CreatePlayerViewConstraints ()
-        {
-            var constraints = new List<NSLayoutConstraint> ();
-            constraints.AddRange (FillHorizontal (PlayerView, false));
-            constraints.Add (PinBottom (PlayerView));
-
-            playerViewConstraints = constraints.ToArray ();
+            AddConstraints (FillHorizontal (PlayerView, false));
+            AddConstraint (PinBottom (PlayerView));
         }
 
         void CreateContentViewConstraints (NSView view)

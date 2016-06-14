@@ -29,7 +29,8 @@ namespace RedditPlayer.Mac
             var windowController = new PlayerWindowController ();
 
             Locator.CurrentMutable.RegisterConstant (new IMediaProvider [] {
-                new Youtube(new YoutubePlayer(windowController.Window))
+                new Youtube(new YoutubePlayer(windowController.Window)),
+                new Soundcloud(new SoundcloudApi ("4fea3da6c7cb6807bcd29df897cb303e"), new SoundcloudPlayer())
             }, typeof (IMediaProvider []));
 
             var viewModel = new ApplicationViewModel ();

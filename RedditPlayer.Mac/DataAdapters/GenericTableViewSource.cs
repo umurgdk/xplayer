@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace RedditPlayer.Mac.DataAdapters
 {
     public class GenericTableViewSource<TItem> : NSTableViewSource, INSTableViewDelegate
-        where TItem : class 
+        where TItem : class
     {
         NSTableView tableView;
         IReactiveList<TItem> items;
@@ -23,7 +23,7 @@ namespace RedditPlayer.Mac.DataAdapters
         public delegate void DoubleClickHandler (TItem item);
         public event DoubleClickHandler DoubleClicked;
 
-        float? cachedRowHeight;
+        public float? RowHeight { get; set; }
 
         public GenericTableViewSource (NSTableView tableView, IReactiveList<TItem> items, Func<TItem, NSTableColumn, string> identifierForItem, Func<TItem, string, NSView> viewCreator, Action<TItem, string, NSView> viewBuilder)
         {
@@ -35,28 +35,23 @@ namespace RedditPlayer.Mac.DataAdapters
 
             tableView.DoubleAction = new ObjCRuntime.Selector ("doubleClick:");
             tableView.Target = this;
-
-            items.Changed.Subscribe (args => tableView.ReloadData ());
         }
 
-        public override NSTableRowView GetRowView (NSTableView tableView, nint row)
-        {
-            if (RowViewCreator != null) {
-                return RowViewCreator ((int)row);
-            }
+        //public override NSTableRowView GetRowView (NSTableView tableView, nint row)
+        //{
+        //    if (RowViewCreator != null) {
+        //        return RowViewCreator ((int)row);
+        //    }
 
-            return new GrayRowView ();
-        }
+        //    return new GrayRowView ();
+        //}
 
         public override nfloat GetRowHeight (NSTableView tableView, nint row)
         {
-            if (cachedRowHeight == null)
-            {
-                var view = viewCreator (items[(int)row], "");
-                cachedRowHeight = (float)view.FittingSize.Height;
-            }
+            if (RowHeight.HasValue)
+                return RowHeight.Value;
 
-            return cachedRowHeight.Value;
+            return 30;
         }
 
         public override nint GetRowCount (NSTableView tableView)
@@ -79,17 +74,18 @@ namespace RedditPlayer.Mac.DataAdapters
             return view;
         }
 
-        public override void DidAddRowView (NSTableView tableView, NSTableRowView rowView, nint row)
-        {
-            var view = rowView.ViewAtColumn (0);
-            view.Superview.AddConstraints (FillHorizontal (view, false));
-            view.Superview.AddConstraints (FillVertical (view, false));
-        }
+        //public override void DidAddRowView (NSTableView tableView, NSTableRowView rowView, nint row)
+        //{
+        //    var view = rowView.ViewAtColumn (0);
+        //    view.Superview.AddConstraints (FillHorizontal (view, false));
+        //    view.Superview.AddConstraints (FillVertical (view, false));
+        //}
 
-        [Export("doubleClick:")]
-        public void DoubleClick(NSObject sender)
+        [Export ("doubleClick:")]
+        public void DoubleClick (NSObject sender)
         {
-            DoubleClicked?.Invoke (items? [(int)tableView.ClickedRow]);
+            if (tableView.ClickedRow < items.Count)
+                DoubleClicked?.Invoke (items? [(int)tableView.ClickedRow]);
         }
     }
 }

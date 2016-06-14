@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="Test.cs" />
     <Compile Include="Domain\MediaProviders\Youtube.cs" />
+    <Compile Include="Domain\MediaProviders\Soundcloud.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

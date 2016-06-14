@@ -24,6 +24,7 @@ namespace RedditPlayer.Mac.Views.Player
             TranslatesAutoresizingMaskIntoConstraints = false;
 
             WantsLayer = true;
+            Layer.ZPosition = 100;
             Layer.MasksToBounds = false;
 
             CoverImage = new NSImageView ();
@@ -37,6 +38,9 @@ namespace RedditPlayer.Mac.Views.Player
             SongTitle.StringValue = "Artist - Song Title";
             SongTitle.Alignment = NSTextAlignment.Center;
             SongTitle.TextColor = NSColor.FromRgb (84, 84, 84);
+            SongTitle.SetContentCompressionResistancePriority (500, NSLayoutConstraintOrientation.Horizontal);
+            SongTitle.MaximumNumberOfLines = 2;
+            SongTitle.LineBreakMode = NSLineBreakMode.TruncatingTail;
 
             Progress = new PlayerProgressControl ();
 

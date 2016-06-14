@@ -19,7 +19,7 @@ namespace RedditPlayer.Mac.Views.SearchResults
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
             Identifier = "SearchResultSongView";
-            //WantsLayer = true;
+            WantsLayer = true;
 
             Thumbnail = new SongThumbnailView ();
             Thumbnail.Identifier = "Thumbnail";

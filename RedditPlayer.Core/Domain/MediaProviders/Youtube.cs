@@ -37,7 +37,7 @@ namespace RedditPlayer.Domain.MediaProviders
                 return list.Items.Select(video =>
                 {
                     var duration = XmlConvert.ToTimeSpan(video.ContentDetails.Duration);
-                    return new Track(video.Id, this, video.Snippet.Title, video.Snippet.Thumbnails.Default__.Url, duration, null, null);
+                    return new Track(video.Id, video.Snippet.Title, video.Snippet.Thumbnails.Default__.Url, duration, this);
                 }).ToList();
             }
 

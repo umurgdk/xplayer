@@ -28,81 +28,88 @@ namespace RedditPlayer.ViewModels
 
         ITimer timer;
 
-        public PlayerViewModel ()
+        public PlayerViewModel()
         {
-            timer = Locator.CurrentMutable.GetService<ITimer> ();
+            timer = Locator.CurrentMutable.GetService<ITimer>();
             timer.Interval = 1000;
             timer.Elapsed += OnTimerElapsed;
 
             Progress = 0.0f;
 
-            var settings = Locator.CurrentMutable.GetService<ISettings> ();
+            var settings = Locator.CurrentMutable.GetService<ISettings>();
             Volume = settings.Volume;
 
-            var volumeObservable = this.WhenAnyValue (vm => vm.Volume)
-                .Where (_ => CurrentTrack != null);
+            var volumeObservable = this.WhenAnyValue(vm => vm.Volume)
+                .Where(_ => CurrentTrack != null);
 
-            var trackObservable = this.WhenAnyValue (vm => vm.CurrentTrack)
-                .Where (track => track != null)
-                .DistinctUntilChanged ();
+            var trackObservable = this.WhenAnyValue(vm => vm.CurrentTrack)
+                .Where(track => track != null)
+                .DistinctUntilChanged();
 
-            volumeObservable.CombineLatest (trackObservable, (volume, track) => volume)
-                            .Subscribe (volume => SetPlayerVolume (volume));
+            volumeObservable.CombineLatest(trackObservable, (volume, track) => volume)
+                            .Subscribe(volume => SetPlayerVolume(volume));
         }
 
-        void OnTimerElapsed (object sender, EventArgs args)
+        void OnTimerElapsed(object sender, EventArgs args)
         {
-            if (CurrentTrack == null) {
-                timer.Stop ();
+            if (CurrentTrack == null)
+            {
+                timer.Stop();
                 return;
             }
 
-            var elapsed = CurrentTrack.Provider.Player.GetElapsedTime ();
+            var elapsed = CurrentTrack.Provider.Player.GetElapsedTime();
             var elapsedSeconds = (float)elapsed.TotalSeconds;
             var totalSeconds = (float)CurrentTrack.Duration.TotalSeconds;
 
             Progress = elapsedSeconds / totalSeconds;
         }
 
-        public void Play (Track track)
+        public void Play(Track track)
         {
-            timer.Start ();
-            track.Provider.Player.Play (track);
+            timer.Start();
 
-            if (track != CurrentTrack) {
+
+            if (track != CurrentTrack)
+            {
+                CurrentTrack?.Provider.Player.Stop();
                 CurrentTrack = track;
                 Progress = 0;
             }
 
+            track.Provider.Player.Play(track);
+
             Playing = true;
         }
 
-        public void Pause ()
+        public void Pause()
         {
-            CurrentTrack?.Provider.Player.Pause ();
+            CurrentTrack?.Provider.Player.Pause();
             Playing = false;
         }
 
-        public void ToggleMute ()
+        public void ToggleMute()
         {
             Muted = !Muted;
 
-            if (Muted) {
-                CurrentTrack?.Provider.Player.Mute ();
-            } else {
-                CurrentTrack?.Provider.Player.Unmute ();
+            if (Muted)
+            {
+                CurrentTrack?.Provider.Player.Mute();
+            }
+            else {
+                CurrentTrack?.Provider.Player.Unmute();
             }
         }
 
-        public void Seek (float progress)
+        public void Seek(float progress)
         {
             Progress = progress;
-            CurrentTrack?.Provider.Player.Seek (progress);
+            CurrentTrack?.Provider.Player.Seek(progress);
         }
 
-        void SetPlayerVolume (float volume)
+        void SetPlayerVolume(float volume)
         {
-            CurrentTrack.Provider.Player.SetVolume (volume);
+            CurrentTrack.Provider.Player.SetVolume(volume);
         }
     }
 }

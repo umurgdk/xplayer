@@ -33,9 +33,18 @@ namespace RedditPlayer.Mac.Players
             webView.WindowScriptObject.EvaluateWebScript ("playVideo()");
         }
 
+        public void Stop ()
+        {
+            webView?.WindowScriptObject.EvaluateWebScript ("stopVideo()");
+            webView?.RemoveFromSuperview ();
+            currentTrack = null;
+            webView = null;
+        }
+
         public void Play (Track track)
         {
             if (track != currentTrack) {
+                Stop ();
                 currentTrack = track;
                 LoadTrackPage (track);
                 return;
@@ -56,7 +65,7 @@ namespace RedditPlayer.Mac.Players
             webView = new WebView (new CGRect (0, 0, 10, 10), "youtube player", "players");
             webView.FrameLoadDelegate = this;
 
-            var url = string.Format ("https://www.youtube.com/watch?v={0}", track.UniqueId);
+            var url = string.Format ("https://www.youtube.com/watch?v={0}", track.Id);
             var request = NSUrlRequest.FromUrl (NSUrl.FromString (url));
 
             webView.Preferences.JavaScriptEnabled = false;
@@ -75,7 +84,7 @@ namespace RedditPlayer.Mac.Players
                 var playerScript = NSData.FromFile (playerScriptPath).ToString (NSStringEncoding.UTF8).ToString ();
 
                 webView.Preferences.JavaScriptEnabled = true;
-                sender.WindowScriptObject.EvaluateWebScript (playerScript.Replace ("{{videoId}}", currentTrack.UniqueId));
+                sender.WindowScriptObject.EvaluateWebScript (playerScript.Replace ("{{videoId}}", currentTrack.Id));
                 Play ();
                 loadingNewPlayer = true;
                 return;

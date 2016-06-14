@@ -4,13 +4,14 @@ namespace RedditPlayer.Domain.Media
 {
     public interface IPlayer
     {
-        TimeSpan GetElapsedTime ();
-        void Play (Track track);
-        void Pause ();
+        TimeSpan GetElapsedTime();
+        void Play(Track track);
+        void Pause();
+        void Stop();
 
-        void Mute ();
-        void Unmute ();
-        void SetVolume (float volume);
-        void Seek (float progress);
+        void Mute();
+        void Unmute();
+        void SetVolume(float volume);
+        void Seek(float progress);
     }
 }

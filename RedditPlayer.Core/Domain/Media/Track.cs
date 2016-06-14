@@ -4,23 +4,22 @@ namespace RedditPlayer.Domain.Media
 {
     public class Track
     {
-        public string Title    { get; set; }
-		public string CoverUrl { get; set; }
-        public TimeSpan Duration    { get; set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string CoverUrl { get; set; }
+        public TimeSpan Duration { get; set; }
+        public string AudioUrl { get; set; }
 
-        public string UniqueId { get; set; }
         public string ArtistId { get; set; }
-        public string AlbumId  { get; set; }
+        public string AlbumId { get; set; }
         public IMediaProvider Provider { get; set; }
 
-        public Track(string uniqueId, IMediaProvider provider, string title, string coverUrl, TimeSpan duration, string artistId, string albumId)
+        public Track(string id, string title, string coverUrl, TimeSpan duration, IMediaProvider provider)
         {
-			UniqueId = uniqueId;
+            Id = id;
             Provider = provider;
             Title = title;
             Duration = duration;
-            ArtistId = artistId;
-            AlbumId = albumId;
             CoverUrl = coverUrl;
         }
     }

@@ -31,6 +31,8 @@ namespace RedditPlayer.Mac.Views.SearchBar
         public SearchBarView ()
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
+            WantsLayer = true;
+            Layer.BackgroundColor = NSColor.White.CGColor;
 
             searchIcon = new NSImageView ();
             searchIcon.Image = NSImage.ImageNamed ("Search");

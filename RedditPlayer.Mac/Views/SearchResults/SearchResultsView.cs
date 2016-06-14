@@ -1,5 +1,4 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
 
 namespace RedditPlayer.Mac.Views.SearchResults
@@ -7,23 +6,24 @@ namespace RedditPlayer.Mac.Views.SearchResults
     public class SearchResultsView : NSView
     {
         public readonly RPTableView ResultsList;
+        public readonly NSView Container;
+        public readonly NSScrollView ScrollView;
 
         public SearchResultsView ()
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
+            WantsLayer = true;
+            Layer.ZPosition = 0;
+            NeedsDisplay = true;
 
-            var scrollView = new NSScrollView ();
-            scrollView.TranslatesAutoresizingMaskIntoConstraints = false;
+            ScrollView = new NSScrollView ();
+            ScrollView.TranslatesAutoresizingMaskIntoConstraints = false;
+            ScrollView.WantsLayer = true;
+            ScrollView.ContentView = new FlippedClipView ();
 
-            var flipped = new FlippedView ();
-
-            var stack = new NSStackView ();
-			stack.TranslatesAutoresizingMaskIntoConstraints = false;
-            stack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            stack.Spacing = 15;
-            stack.Distribution = NSStackViewDistribution.Fill;
-            stack.Alignment = NSLayoutAttribute.Leading;
-            stack.SetHuggingPriority ((float)NSLayoutPriority.WindowSizeStayPut, NSLayoutConstraintOrientation.Horizontal);
+            var flipped = new NSView ();
+            flipped.TranslatesAutoresizingMaskIntoConstraints = false;
+            Container = flipped;
 
             var songColumn = new NSTableColumn ("SongColumn");
             songColumn.MinWidth = 400;
@@ -37,34 +37,36 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
             var tracksHeader = CreateSearchResultHeader ("Tracks");
 
-            stack.AddArrangedSubview (tracksHeader);
-            stack.AddArrangedSubview (ResultsList);
+            flipped.AddSubview (tracksHeader);
+            flipped.AddSubview (ResultsList);
 
-            flipped.AddSubview (stack);
+            ScrollView.DocumentView = flipped;
 
-            scrollView.DocumentView = flipped;
+            AddSubview (ScrollView);
 
-            AddSubview (scrollView);
-
-            AddConstraints (FillVertical (scrollView, false));
-            AddConstraints (FillHorizontal (scrollView, false));
+            AddConstraints (FillVertical (ScrollView, false));
+            AddConstraints (FillHorizontal (ScrollView, false));
 
             AddConstraints (FillHorizontal (flipped, false));
-            AddConstraints (FillVertical (flipped, false));
+            AddConstraint (PinTop (flipped, ScrollView.ContentView));
+            AddConstraint (PinBottom (flipped, ScrollView.ContentView, 0, NSLayoutRelation.GreaterThanOrEqual));
+            //AddConstraint (PinTop (flipped));
 
-            AddConstraints (FillHorizontal (stack, false));
-            AddConstraint (PinTop (stack, flipped, 20));
+            AddConstraint (MinimumWidth (ScrollView, 400));
+            AddConstraint (MinimumHeight (ScrollView, 400));
 
-            AddConstraints (FillHorizontal (tracksHeader, 20));
-
-            AddConstraint (MinimumWidth (scrollView, 400));
-            AddConstraint (MinimumHeight (scrollView, 400));
+            AddConstraint (PinTop (tracksHeader, flipped, 30));
+            AddConstraints (FillHorizontal (tracksHeader, true));
+            AddConstraints (StackVertical (tracksHeader, ResultsList));
+            AddConstraints (FillHorizontal (ResultsList, false));
+            AddConstraints (NSLayoutConstraint.FromVisualFormat ("V:[list]-(>=70)-|", NSLayoutFormatOptions.None, new object [] { "list", ResultsList }));
         }
 
         NSTextField CreateSearchResultHeader (string title)
         {
             var label = NSLabel.CreateWithFont ("SF UI Text Light", 20);
             label.StringValue = title;
+            label.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
             return label;
         }

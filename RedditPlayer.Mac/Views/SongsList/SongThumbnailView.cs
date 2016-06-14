@@ -5,9 +5,11 @@ using RedditPlayer.Mac.Extensions;
 using CoreGraphics;
 using CoreAnimation;
 using QuartzComposer;
+using System.Threading.Tasks;
 
 namespace RedditPlayer.Mac.Views.SongsList
 {
+    [Register ("SongThumbnailView")]
     public class SongThumbnailView : NSView
     {
         CALayer imageLayer;
@@ -32,26 +34,6 @@ namespace RedditPlayer.Mac.Views.SongsList
             }
         }
 
-        NSImage image;
-        public NSImage Image
-        {
-            get
-            {
-                return image;
-            }
-            set
-            {
-                image = value;
-
-                if (imageLayer != null) {
-                    imageLayer.RemoveFromSuperLayer ();
-                    imageLayer = null;
-                }
-
-                NeedsDisplay = true;
-            }
-        }
-
         bool hasShadow;
         public bool HasShadow
         {
@@ -69,6 +51,48 @@ namespace RedditPlayer.Mac.Views.SongsList
                     Shadow = null;
                 }
             }
+        }
+
+        NSImage image;
+        public NSImage Image
+        {
+            get
+            {
+                return image;
+            }
+
+            set
+            {
+                image = value;
+                imageLayer?.RemoveFromSuperLayer ();
+                imageLayer = null;
+                NeedsDisplay = true;
+            }
+        }
+
+        public void SetImageAsync (string url)
+        {
+            if (url == null) {
+                Image = null;
+                return;
+            }
+
+            Task.Run (() => {
+                var _image = new NSImage (NSUrl.FromString (url));
+
+                NSApplication.SharedApplication.InvokeOnMainThread (() => {
+                    Image = _image;
+                    CATransaction.Flush ();
+                });
+            });
+        }
+
+        public override bool WantsUpdateLayer => true;
+
+        public SongThumbnailView (IntPtr handle) : base (handle)
+        {
+            Initialize ();
+            cornerRadius = 0;
         }
 
         public SongThumbnailView ()
@@ -127,6 +151,10 @@ namespace RedditPlayer.Mac.Views.SongsList
                 image.UnlockFocus ();
 
                 Layer.AddSublayer (imageLayer);
+            }
+
+            if (image == null) {
+                imageLayer?.RemoveFromSuperLayer ();
             }
         }
     }
