@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="SearchResultTabView">
+            <connections>
+                <outlet property="imageView" destination="czf-zG-ciD" id="yan-oH-Tog"/>
+                <outlet property="textField" destination="y13-o7-Go8" id="kGa-fu-G2W"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="2" customClass="SearchResultTabView">
+            <rect key="frame" x="0.0" y="0.0" width="91" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="czf-zG-ciD">
+                    <rect key="frame" x="8" y="8" width="16" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="4PF-aH-Obk"/>
+                        <constraint firstAttribute="height" constant="16" id="6Jf-LZ-CXf"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Playlist" id="7Rs-ou-M9S"/>
+                </imageView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y13-o7-Go8">
+                    <rect key="frame" x="30" y="8" width="55" height="20"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="T5z-4y-byE">
+                        <font key="font" size="14" name="SFUIText-Regular"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="czf-zG-ciD" firstAttribute="top" secondItem="2" secondAttribute="top" constant="8" id="ClO-F3-Xyv"/>
+                <constraint firstItem="y13-o7-Go8" firstAttribute="top" secondItem="2" secondAttribute="top" constant="4" id="UgM-C4-iz6"/>
+                <constraint firstAttribute="bottom" secondItem="czf-zG-ciD" secondAttribute="bottom" constant="8" id="V1J-bJ-Aaz"/>
+                <constraint firstItem="czf-zG-ciD" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="WJU-DR-KPF"/>
+                <constraint firstItem="y13-o7-Go8" firstAttribute="leading" secondItem="czf-zG-ciD" secondAttribute="trailing" constant="8" id="a7Q-6I-uzS"/>
+                <constraint firstAttribute="trailing" secondItem="y13-o7-Go8" secondAttribute="trailing" constant="8" id="l0B-rS-eG0"/>
+            </constraints>
+            <point key="canvasLocation" x="147.5" y="379"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="Playlist" width="14" height="16"/>
+    </resources>
+</document>
