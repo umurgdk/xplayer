@@ -68,6 +68,7 @@ namespace RedditPlayer.Mac.Views.Detail
 
             AddConstraints (FillHorizontal (PlayerView, false));
             AddConstraint (PinBottom (PlayerView));
+            AddConstraint (MinimumWidth (this, 400));
         }
 
         void CreateContentViewConstraints (NSView view)

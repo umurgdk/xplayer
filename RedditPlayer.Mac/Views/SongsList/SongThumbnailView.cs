@@ -77,7 +77,7 @@ namespace RedditPlayer.Mac.Views.SongsList
                 return;
             }
 
-            Task.Run (() => {
+            var task = Task.Run (() => {
                 var _image = new NSImage (NSUrl.FromString (url));
 
                 NSApplication.SharedApplication.InvokeOnMainThread (() => {

@@ -61,6 +61,7 @@
     <Compile Include="Domain\Media\IPlayer.cs" />
     <Compile Include="Services\ITimer.cs" />
     <Compile Include="Services\ISettings.cs" />
+    <Compile Include="Domain\MediaProviders\Spotify.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Google.Apis">
@@ -86,9 +87,6 @@
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI.Fody.Helpers">
       <HintPath>..\packages\ReactiveUI.Fody.1.1.51\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\ReactiveUI.Fody.Helpers.dll</HintPath>
@@ -116,6 +114,12 @@
     </Reference>
     <Reference Include="Zlib.Portable">
       <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\dotNETSpotifyWebAPI.1.0.2\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SpotifyWebAPI">
+      <HintPath>..\packages\dotNETSpotifyWebAPI.1.0.2\lib\SpotifyWebAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

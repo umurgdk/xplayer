@@ -6,56 +6,56 @@ using RedditPlayer.Domain.Media;
 
 namespace RedditPlayer.Tests
 {
-    [TestFixture ()]
+    [TestFixture()]
     public class YoutubeTest
     {
-        [Test ()]
-        public async Task GetTrackForIds ()
+        [Test()]
+        public async Task GetTrackForIds()
         {
-            var youtube = new Youtube (new YoutubeDummyPlayer ());
+            var youtube = new Youtube(new YoutubeDummyPlayer());
 
-            var tracks = await youtube.GetTrackForId ("Vy3DvF8nibA");
+            var tracks = await youtube.GetTrackForId("Vy3DvF8nibA");
 
-            Assert.AreEqual ("Top 10 Things I Wish I Had Known About C++", tracks [0].Title);
-            Assert.IsNotEmpty (tracks [0].CoverUrl);
+            Assert.AreEqual("Top 10 Things I Wish I Had Known About C++", tracks[0].Title);
+            Assert.IsNotEmpty(tracks[0].CoverUrl);
         }
     }
 
     public class YoutubeDummyPlayer : IPlayer
     {
-        public TimeSpan GetElapsedTime ()
+        public TimeSpan GetElapsedTime()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void Mute ()
+        public void Mute()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void Pause ()
+        public void Pause()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void Play (Track track)
+        public void Play(Track track)
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void Seek (float progress)
+        public void Seek(float progress)
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void SetVolume (float volume)
+        public void SetVolume(float volume)
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        public void Unmute ()
+        public void Unmute()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
     }
 }

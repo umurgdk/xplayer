@@ -22,10 +22,11 @@ namespace RedditPlayer.Mac.Views
 
         ApplicationViewModel appModel;
 
-        public Navigator (ApplicationViewModel appModel, PlayerWindowController windowController)
+        public Navigator (ApplicationViewModel appModel, PlayerWindowController windowController, MainViewController mainViewController)
         {
             this.appModel = appModel;
             this.windowController = windowController;
+            this.mainViewController = mainViewController;
         }
 
         public void PresentWelcomeScreen ()

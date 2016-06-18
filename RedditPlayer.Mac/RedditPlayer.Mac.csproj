@@ -28,6 +28,10 @@
     <UseSGen>true</UseSGen>
     <UseRefCounting>true</UseRefCounting>
     <XamMacArch></XamMacArch>
+    <HttpClientHandler>NSUrlSessionHandler</HttpClientHandler>
+    <LinkMode>None</LinkMode>
+    <PackageSigningKey>Developer ID Installer</PackageSigningKey>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -95,11 +99,14 @@
     <Reference Include="Google.Apis.YouTube.v3">
       <HintPath>..\packages\Google.Apis.YouTube.v3.1.13.1.511\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="ReactiveUI.Fody.Helpers">
       <HintPath>..\packages\ReactiveUI.Fody.1.1.51\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\ReactiveUI.Fody.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\dotNETSpotifyWebAPI.1.0.2\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SpotifyWebAPI">
+      <HintPath>..\packages\dotNETSpotifyWebAPI.1.0.2\lib\SpotifyWebAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -242,7 +249,6 @@
     <Compile Include="DataAdapters\GenericTableViewSource.cs" />
     <Compile Include="DataAdapters\SearchResultsTableSource.cs" />
     <Compile Include="DataAdapters\ISelectableView.cs" />
-    <Compile Include="Views\RPTableView.cs" />
     <Compile Include="RPViewInspector.cs" />
     <Compile Include="Views\WelcomeView.cs" />
     <Compile Include="Views\MainView.cs" />
@@ -263,14 +269,6 @@
     <Compile Include="Extensions\NSViewExtensions.cs" />
     <Compile Include="Extensions\NSImageViewExtensions.cs" />
     <Compile Include="Views\FlippedClipView.cs" />
-    <Compile Include="Views\Detail\DetailNib.cs" />
-    <Compile Include="Views\Detail\DetailNibController.cs" />
-    <Compile Include="Views\Detail\DetailNib.designer.cs">
-      <DependentUpon>DetailNib.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Detail\DetailNibController.designer.cs">
-      <DependentUpon>DetailNibController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\SearchResults\SearchResultsXib.cs" />
     <Compile Include="Views\SearchResults\SearchResultsXibController.cs" />
     <Compile Include="Views\SearchResults\SearchResultsXib.designer.cs">
@@ -285,10 +283,10 @@
     <Compile Include="Views\SearchResults\ArtistItemView.designer.cs">
       <DependentUpon>ArtistItemView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Players\SpotifyPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
-    <InterfaceDefinition Include="Views\Detail\DetailNib.xib" />
     <InterfaceDefinition Include="Views\SearchResults\SearchResultsXib.xib" />
     <InterfaceDefinition Include="Views\SearchResults\ArtistItemView.xib" />
   </ItemGroup>
@@ -296,6 +294,10 @@
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">
       <Project>{DF737DB6-2E43-487C-A779-6EF611E1336E}</Project>
       <Name>RedditPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CocoaSpotify\CocoaSpotify.csproj">
+      <Project>{02811F5B-A575-4FA3-89EC-822CFF06076D}</Project>
+      <Name>CocoaSpotify</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
