@@ -1,5 +1,7 @@
 ﻿using System;
 using RedditPlayer.Domain.MediaProviders;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace RedditPlayer.Domain.Media
 {
     public class Artist
@@ -9,7 +11,9 @@ namespace RedditPlayer.Domain.Media
         public string UniqueId { get; set; }
         public IMediaProvider MediaProvider { get; protected set; }
 
-        public Artist(string uniqueId, string name, string pictureUrl, IMediaProvider mediaProvider)
+        public string Bio { get; set; } = "";
+
+        public Artist (string uniqueId, string name, string pictureUrl, IMediaProvider mediaProvider)
         {
             UniqueId = uniqueId;
             Name = name;

@@ -210,14 +210,12 @@
     <Folder Include="Assets.xcassets\SpeakerMuted.imageset\" />
     <Folder Include="Assets.xcassets\Video.imageset\" />
     <Folder Include="Assets.xcassets\Artist.imageset\" />
+    <Folder Include="Views\ArtistDetail\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-    <None Include="Views\SongsList\SongsListView.cs" />
-    <None Include="Views\SongsList\SongView.cs" />
-    <None Include="Views\SongsList\SongRowView.cs" />
     <None Include="Views\Playlists\PlaylistDetailView.cs" />
     <None Include="Views\Playlists\PlaylistDetailViewController.cs" />
     <None Include="FodyWeavers.xml" />
@@ -284,11 +282,29 @@
       <DependentUpon>ArtistItemView.cs</DependentUpon>
     </Compile>
     <Compile Include="Players\SpotifyPlayer.cs" />
+    <Compile Include="Views\ArtistDetail\ArtistDetailView.cs" />
+    <Compile Include="Views\ArtistDetail\ArtistDetailViewController.cs" />
+    <Compile Include="Views\ArtistDetail\ArtistDetailView.designer.cs">
+      <DependentUpon>ArtistDetailView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ArtistDetail\ArtistDetailViewController.designer.cs">
+      <DependentUpon>ArtistDetailViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SongsList\SongListView.cs" />
+    <Compile Include="Views\SongsList\SongListViewController.cs" />
+    <Compile Include="Views\SongsList\SongListView.designer.cs">
+      <DependentUpon>SongListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SongsList\SongListViewController.designer.cs">
+      <DependentUpon>SongListViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
     <InterfaceDefinition Include="Views\SearchResults\SearchResultsXib.xib" />
     <InterfaceDefinition Include="Views\SearchResults\ArtistItemView.xib" />
+    <InterfaceDefinition Include="Views\ArtistDetail\ArtistDetailView.xib" />
+    <InterfaceDefinition Include="Views\SongsList\SongListView.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">

@@ -1,6 +1,7 @@
 ﻿using System;
 using ReactiveUI;
 using RedditPlayer.ViewModels;
+using RedditPlayer.Domain.Media;
 
 namespace RedditPlayer.Services
 {
@@ -8,9 +9,10 @@ namespace RedditPlayer.Services
     {
         void PresentWelcomeScreen();
         void PresentSearchResults();
-        void PresentPlaylist ();
+        void PresentPlaylist();
+        void PresentArtist(ArtistDetailViewModel artist);
 
-        void ShowWindow (object sender);
+        void ShowWindow(object sender);
     }
 }
 

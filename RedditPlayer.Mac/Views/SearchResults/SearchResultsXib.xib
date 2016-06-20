@@ -191,6 +191,7 @@
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
                                                         <outlet property="dataSource" destination="-2" id="X4n-FX-gZT"/>
+                                                        <outlet property="delegate" destination="-2" id="srQ-RL-WH2"/>
                                                     </connections>
                                                 </collectionView>
                                             </subviews>

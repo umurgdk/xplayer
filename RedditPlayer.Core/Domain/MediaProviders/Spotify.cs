@@ -15,11 +15,6 @@ namespace RedditPlayer.Domain.MediaProviders
 
         public IPlayer Player { get; protected set; }
 
-        public async Task<IList<Track>> GetTrackForId (params string [] ids)
-        {
-            return new List<Track> ();
-        }
-
         public async Task<IList<Artist>> SearchArtists (string query)
         {
             var results = await SpotifyWebAPI.Artist.Search (query);
@@ -32,31 +27,65 @@ namespace RedditPlayer.Domain.MediaProviders
             return results.Items.Select (FromSPTrack).ToList ();
         }
 
-        Artist FromSPArtist (SpotifyWebAPI.Artist artist)
+        public async Task<IList<Album>> GetAlbums (Artist artist)
         {
-            string imageUrl = null;
-            if (artist.Images.Count > 0) {
-                imageUrl = artist.Images [0].Url;
-            }
+            var spArtist = await SpotifyWebAPI.Artist.GetArtist (artist.UniqueId);
+            var albumPage = await spArtist.GetAlbums ();
+            var albums = await albumPage.ToList ();
 
-            return new Artist (artist.Id, artist.Name, imageUrl, this);
+            return albums.Select (FromSPAlbum).ToList ();
         }
 
-        Track FromSPTrack (SpotifyWebAPI.Track track)
+        public async Task<IList<Track>> GetPopularTracks (Artist artist)
+        {
+            var spArtist = await SpotifyWebAPI.Artist.GetArtist (artist.UniqueId);
+            var popularSongs = await spArtist.GetTopTracks ();
+
+            return popularSongs.Select (FromSPTrack).ToList ();
+        }
+
+        Artist FromSPArtist (SpotifyWebAPI.Artist spArtist)
+        {
+            string imageUrl = null;
+            if (spArtist.Images.Count > 0) {
+                imageUrl = spArtist.Images [0].Url;
+            }
+
+            return new Artist (spArtist.Id, spArtist.Name, imageUrl, this);
+        }
+
+        Track FromSPTrack (SpotifyWebAPI.Track spTrack)
         {
             string title;
-            if (track.Artists.Count > 0) {
-                title = string.Format ("{0} - {1}", track.Artists [0].Name, track.Name);
+            if (spTrack.Artists.Count > 0) {
+                title = string.Format ("{0} - {1}", spTrack.Artists [0].Name, spTrack.Name);
             } else {
-                title = track.Name;
+                title = spTrack.Name;
             }
 
             string imageUrl = null;
-            if (track.Album?.Images.Count > 0) {
-                imageUrl = track.Album.Images [0].Url;
+            if (spTrack.Album?.Images.Count > 0) {
+                imageUrl = spTrack.Album.Images [0].Url;
             }
 
-            return new Track (track.Id, title, imageUrl, TimeSpan.FromMilliseconds (track.Duration), this);
+            var track = new Track (spTrack.Id, title, imageUrl, TimeSpan.FromMilliseconds (spTrack.Duration), this);
+            track.ArtistId = spTrack.Artists [0].Id;
+            track.AlbumId = spTrack.Album.Id;
+
+            return track;
+        }
+
+        Album FromSPAlbum (SpotifyWebAPI.Album spAlbum)
+        {
+            string imageUrl = null;
+            if (spAlbum.Images.Count > 0) {
+                imageUrl = spAlbum.Images [0].Url;
+            }
+
+            var album = new Album (spAlbum.Name, spAlbum.Id, imageUrl, this);
+            album.ArtistId = spAlbum.Artists [0].Id;
+
+            return album;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using RedditPlayer.Domain.Media;
 using RedditPlayer.Domain.Reddit;
+using System.Diagnostics;
 
 namespace RedditPlayer.Domain.MediaProviders
 {
@@ -26,16 +27,6 @@ namespace RedditPlayer.Domain.MediaProviders
             return Regex.IsMatch(url, "soundcloud");
         }
 
-        public Task<ITrack> GetTrakForUrl(string url)
-        {
-            return null;
-        }
-
-        public Task<IList<Track>> GetTrackForId(params string[] ids)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IList<Track>> SearchTracks(string query)
         {
             return await Api.SearchTracks(this, query);
@@ -44,6 +35,20 @@ namespace RedditPlayer.Domain.MediaProviders
         public async Task<IList<Artist>> SearchArtists(string query)
         {
             return await Api.SearchUsers(this, query);
+        }
+
+        // TODO: Implement Soundcloud#GetAlbums(Artist artist)
+        public async Task<IList<Album>> GetAlbums(Artist artist)
+        {
+            Debug.WriteLine("Soundcloud#GetAlbums is not implemented yet!");
+            return new List<Album>();
+        }
+
+        // TODO: Implement Soundcloud#GetPopularTracks(Artist artist)
+        public async Task<IList<Track>> GetPopularTracks(Artist artist)
+        {
+            Debug.WriteLine("Soundcloud#GetPopularTracks is not implemented yet!");
+            return new List<Track>();
         }
     }
 }

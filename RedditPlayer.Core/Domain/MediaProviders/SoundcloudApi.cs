@@ -10,7 +10,7 @@ namespace RedditPlayer.Domain.MediaProviders
 {
     public interface ISoundcloudApi
     {
-        Task<SoundcloudTrack> GetTrack (string trackId);
+        Task<SoundcloudTrack> GetTrack(string trackId);
     }
 
     public class SoundcloudApi : ISoundcloudApi
@@ -19,68 +19,69 @@ namespace RedditPlayer.Domain.MediaProviders
 
         readonly string clientId;
 
-        public SoundcloudApi (string clientId)
+        public SoundcloudApi(string clientId)
         {
             this.clientId = clientId;
         }
 
-        public async Task<List<Track>> SearchTracks (Soundcloud mediaProvider, string query)
+        public async Task<List<Track>> SearchTracks(Soundcloud mediaProvider, string query)
         {
-            var client = new HttpClient ();
-            var url = new Uri ($"{BaseUrl}tracks?q={query}&types=original,recording&client_id={clientId}&limit=20");
-            var response = await client.GetStringAsync (url);
-            var json = JArray.Parse (response);
+            var client = new HttpClient();
+            var url = new Uri($"{BaseUrl}tracks?q={query}&types=original,recording&client_id={clientId}&limit=20");
+            var response = await client.GetStringAsync(url);
+            var json = JArray.Parse(response);
 
-            return json.Children ()
-                       .Where (token => token ["stream_url"].Value<string> () != null)
-                       .Select (token => JsonToTrack (mediaProvider, token))
-                       .ToList ();
+            return json.Children()
+                       .Where(token => token["stream_url"].Value<string>() != null)
+                       .Select(token => JsonToTrack(mediaProvider, token))
+                       .ToList();
         }
 
-        public async Task<IList<Artist>> SearchUsers (Soundcloud mediaProvider, string query)
+        public async Task<IList<Artist>> SearchUsers(Soundcloud mediaProvider, string query)
         {
-            var client = new HttpClient ();
-            var url = new Uri ($"{BaseUrl}users?q={query}&client_id={clientId}&limit=20");
-            var response = await client.GetStringAsync (url);
-            var json = JArray.Parse (response);
+            var client = new HttpClient();
+            var url = new Uri($"{BaseUrl}users?q={query}&client_id={clientId}&limit=20");
+            var response = await client.GetStringAsync(url);
+            var json = JArray.Parse(response);
 
-            return json.Children ()
-                       .Select (token => JsonToArtist (mediaProvider, token))
-                       .ToList ();
+            return json.Children()
+                       .Where(token => token["track_count"].Value<int>() > 0)
+                       .Select(token => JsonToArtist(mediaProvider, token))
+                       .ToList();
         }
 
-        public async Task<SoundcloudTrack> GetTrack (string trackId)
+        public async Task<SoundcloudTrack> GetTrack(string trackId)
         {
-            var client = new HttpClient ();
-            var url = new Uri ($"{BaseUrl}tracks/{trackId}?client_id={clientId}");
-            var response = await client.GetStringAsync (url);
+            var client = new HttpClient();
+            var url = new Uri($"{BaseUrl}tracks/{trackId}?client_id={clientId}");
+            var response = await client.GetStringAsync(url);
 
-            var json = JObject.Parse (response);
-            return SoundcloudTrack.FromJson (json);
+            var json = JObject.Parse(response);
+            return SoundcloudTrack.FromJson(json);
         }
 
-        Track JsonToTrack (Soundcloud mediaProvider, JToken json)
+        Track JsonToTrack(Soundcloud mediaProvider, JToken json)
         {
-            var track = new Track (
-                json ["id"].Value<string> (),
-                json ["title"].Value<string> (),
-                json ["artwork_url"].Value<string> ()?.Replace ("large", "t300x300"),
-                TimeSpan.FromMilliseconds (json ["duration"].Value<int> ()),
+            var track = new Track(
+                json["id"].Value<string>(),
+                json["title"].Value<string>(),
+                json["artwork_url"].Value<string>()?.Replace("large", "t300x300"),
+                TimeSpan.FromMilliseconds(json["duration"].Value<int>()),
                 mediaProvider
             );
 
-            track.ArtistId = json ["user_id"].Value<string> ();
-            track.AudioUrl = $"{json ["stream_url"]}?client_id={clientId}";
+            track.ArtistId = json["user_id"].Value<string>();
+            track.AudioUrl = $"{json["stream_url"]}?client_id={clientId}";
 
             return track;
         }
 
-        Artist JsonToArtist (Soundcloud mediaProvider, JToken token)
+        Artist JsonToArtist(Soundcloud mediaProvider, JToken token)
         {
-            return new Artist (
-                token ["id"].Value<string> (),
-                token ["username"].Value<string> (),
-                token ["avatar_url"].Value<string> (),
+            return new Artist(
+                token["id"].Value<string>(),
+                token["username"].Value<string>(),
+                token["avatar_url"].Value<string>(),
                 mediaProvider
             );
         }

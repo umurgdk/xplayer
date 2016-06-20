@@ -7,10 +7,13 @@ using RedditPlayer.Mac.Extensions;
 using ReactiveUI;
 using System.Threading.Tasks;
 using RedditPlayer.Mac.Views.SongsList;
+using RedditPlayer.ViewModels;
+using Splat;
+using RedditPlayer.Services;
 
 namespace RedditPlayer.Mac.Views.SearchResults
 {
-    public partial class SearchResultsXibController : ReactiveViewController, INSTableViewDelegate, INSTableViewDataSource, INSCollectionViewDataSource
+    public partial class SearchResultsXibController : ReactiveViewController, INSTableViewDelegate, INSTableViewDataSource, INSCollectionViewDataSource, INSCollectionViewDelegate
     {
         ApplicationViewModel viewModel;
 
@@ -75,6 +78,8 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
             tabGroup.ActivateTab ("songs");
 
+            artistsCollectionView.Delegate = this;
+            artistsCollectionView.Selectable = true;
             artistsCollectionView.RegisterNib (new NSNib ("ArtistItemView", NSBundle.MainBundle), "ArtistItemView");
             artistsCollectionView.RegisterClassForItem (typeof (ArtistItemView), "ArtistItemView");
 
@@ -153,11 +158,15 @@ namespace RedditPlayer.Mac.Views.SearchResults
             var item = collectionView.MakeItem ("ArtistItemView", indexPath) as ArtistItemView;
 
             var artist = viewModel.Search.Artists [(int)indexPath.Item];
-
-            item.ThumbnailView.SetImageAsync (artist.PictureUrl);
-            item.TextField.StringValue = artist.Name;
+            item.Artist = artist;
 
             return item;
+        }
+
+        [Export ("collectionView:shouldSelectItemsAtIndexPaths:")]
+        public NSSet ShouldSelectItems (NSCollectionView collectionView, NSSet indexPaths)
+        {
+            return indexPaths;
         }
     }
 }

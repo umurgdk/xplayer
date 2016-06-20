@@ -62,6 +62,7 @@
     <Compile Include="Services\ITimer.cs" />
     <Compile Include="Services\ISettings.cs" />
     <Compile Include="Domain\MediaProviders\Spotify.cs" />
+    <Compile Include="ViewModels\ArtistDetailViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Google.Apis">

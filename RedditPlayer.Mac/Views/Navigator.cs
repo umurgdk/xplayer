@@ -9,6 +9,7 @@ using Foundation;
 using RedditPlayer.Mac.Views.SearchBar;
 using RedditPlayer.Mac.Views.Player;
 using RedditPlayer.Mac.Views.SearchResults;
+using RedditPlayer.Mac.Views.ArtistDetail;
 
 namespace RedditPlayer.Mac.Views
 {
@@ -49,6 +50,13 @@ namespace RedditPlayer.Mac.Views
             }
 
             detailViewController.SetContentView (searchResultsViewController.View);
+            windowController.PresentView (detailViewController.View);
+        }
+
+        public void PresentArtist (ArtistDetailViewModel artistViewModel)
+        {
+            var viewController = new ArtistDetailViewController (artistViewModel);
+            detailViewController.SetContentView (viewController.View);
             windowController.PresentView (detailViewController.View);
         }
 

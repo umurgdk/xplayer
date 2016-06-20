@@ -5,6 +5,7 @@ using RedditPlayer.Domain.Media;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Diagnostics;
 
 namespace RedditPlayer.Domain.MediaProviders
 {
@@ -24,7 +25,7 @@ namespace RedditPlayer.Domain.MediaProviders
             });
         }
 
-        public async Task<IList<Track>> GetTrackForId (params string [] ids)
+        async Task<IList<Track>> GetTrackForId (params string [] ids)
         {
             var request = service.Videos.List ("id,snippet,contentDetails");
             request.Id = string.Join (",", ids);
@@ -60,6 +61,20 @@ namespace RedditPlayer.Domain.MediaProviders
         public async Task<IList<Artist>> SearchArtists (string query)
         {
             return new List<Artist> ();
+        }
+
+        // TODO: Implement Youtube#GetAlbums(Artist artist)
+        public async Task<IList<Album>> GetAlbums (Artist artist)
+        {
+            Debug.WriteLine ("Youtube#GetAlbums is not implemented yet!");
+            return new List<Album> ();
+        }
+
+        // TODO: Implement Youtube#GetPopularTracks(Artist artist)
+        public async Task<IList<Track>> GetPopularTracks (Artist artist)
+        {
+            Debug.WriteLine ("Youtube#GetPopularTracks is not implemented yet!");
+            return new List<Track> ();
         }
     }
 }
