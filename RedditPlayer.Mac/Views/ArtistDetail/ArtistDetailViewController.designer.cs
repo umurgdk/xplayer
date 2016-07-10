@@ -13,37 +13,45 @@ namespace RedditPlayer.Mac.Views.ArtistDetail
 	partial class ArtistDetailViewController
 	{
 		[Outlet]
-		AppKit.NSTextField ArtistBio { get; set; }
+		RedditPlayer.Mac.Views.ViewPlaceholder albumListViewPlaceholder { get; set; }
 
 		[Outlet]
-		RedditPlayer.Mac.Views.SongsList.SongThumbnailView ArtistImageView { get; set; }
+		RedditPlayer.Mac.Views.ViewPlaceholder headerViewPlaceholder { get; set; }
 
 		[Outlet]
-		AppKit.NSTextField ArtistName { get; set; }
+		RedditPlayer.Mac.Views.ViewPlaceholder playlistViewPlaceholder { get; set; }
 
 		[Outlet]
-		AppKit.NSStackView ContentStack { get; set; }
+		RedditPlayer.Mac.Views.ViewPlaceholder songListViewPlaceholder { get; set; }
+
+		[Outlet]
+		AppKit.NSTabView tabView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ArtistBio != null) {
-				ArtistBio.Dispose ();
-				ArtistBio = null;
+			if (albumListViewPlaceholder != null) {
+				albumListViewPlaceholder.Dispose ();
+				albumListViewPlaceholder = null;
 			}
 
-			if (ArtistImageView != null) {
-				ArtistImageView.Dispose ();
-				ArtistImageView = null;
+			if (headerViewPlaceholder != null) {
+				headerViewPlaceholder.Dispose ();
+				headerViewPlaceholder = null;
 			}
 
-			if (ArtistName != null) {
-				ArtistName.Dispose ();
-				ArtistName = null;
+			if (songListViewPlaceholder != null) {
+				songListViewPlaceholder.Dispose ();
+				songListViewPlaceholder = null;
 			}
 
-			if (ContentStack != null) {
-				ContentStack.Dispose ();
-				ContentStack = null;
+			if (playlistViewPlaceholder != null) {
+				playlistViewPlaceholder.Dispose ();
+				playlistViewPlaceholder = null;
+			}
+
+			if (tabView != null) {
+				tabView.Dispose ();
+				tabView = null;
 			}
 		}
 	}

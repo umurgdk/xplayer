@@ -10,11 +10,12 @@ namespace RedditPlayer.Domain.Media
         public TimeSpan Duration { get; set; }
         public string AudioUrl { get; set; }
 
+        public int OrderInAlbum { get; set; } = 0;
         public string ArtistId { get; set; }
         public string AlbumId { get; set; }
         public IMediaProvider Provider { get; set; }
 
-        public Track(string id, string title, string coverUrl, TimeSpan duration, IMediaProvider provider)
+        public Track (string id, string title, string coverUrl, TimeSpan duration, IMediaProvider provider)
         {
             Id = id;
             Provider = provider;

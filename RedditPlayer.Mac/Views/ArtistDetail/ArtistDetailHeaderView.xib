@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ArtistDetailHeaderViewController">
+            <connections>
+                <outlet property="artistBioView" destination="4E1-j7-aia" id="MAH-wF-FLT"/>
+                <outlet property="artistNameView" destination="cuo-9u-7PV" id="b7a-pO-ajt"/>
+                <outlet property="backgroundImage" destination="1uf-L4-0aB" id="2zx-5o-SXY"/>
+                <outlet property="tabGroup" destination="8Kb-Fi-GmD" id="1Lt-Et-uKP"/>
+                <outlet property="view" destination="2" id="l9H-YH-fWo"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView wantsLayer="YES" verticalHuggingPriority="500" verticalCompressionResistancePriority="1000" id="2">
+            <rect key="frame" x="0.0" y="0.0" width="438" height="157"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="1uf-L4-0aB" customClass="SongThumbnailView">
+                    <rect key="frame" x="0.0" y="0.0" width="438" height="157"/>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cuo-9u-7PV">
+                    <rect key="frame" x="180" y="98" width="78" height="36"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Opeth" id="F4U-hP-OQD">
+                        <font key="font" size="24" name="SFUIText-Regular"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="4E1-j7-aia">
+                    <rect key="frame" x="28" y="58" width="382" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="2Cr-NG-UKL"/>
+                    </constraints>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Multiline Label" id="42I-CI-Xva">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="8Kb-Fi-GmD" customClass="SearchResultsTabGroup">
+                    <rect key="frame" x="0.0" y="0.0" width="438" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="Q6c-Et-1al"/>
+                    </constraints>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="1uf-L4-0aB" firstAttribute="top" secondItem="2" secondAttribute="top" id="0et-cn-P0J"/>
+                <constraint firstItem="cuo-9u-7PV" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="1ce-2o-vcw"/>
+                <constraint firstAttribute="bottom" secondItem="4E1-j7-aia" secondAttribute="bottom" constant="58" id="Gg0-Zj-lYJ"/>
+                <constraint firstAttribute="bottom" secondItem="1uf-L4-0aB" secondAttribute="bottom" id="Msh-Wf-jsq"/>
+                <constraint firstItem="cuo-9u-7PV" firstAttribute="top" secondItem="2" secondAttribute="top" constant="23" id="Qwa-Nq-g0t"/>
+                <constraint firstAttribute="bottom" secondItem="8Kb-Fi-GmD" secondAttribute="bottom" id="WSN-Ao-OcO"/>
+                <constraint firstItem="4E1-j7-aia" firstAttribute="top" secondItem="cuo-9u-7PV" secondAttribute="bottom" constant="10" id="XxT-uN-JrV"/>
+                <constraint firstAttribute="trailing" secondItem="8Kb-Fi-GmD" secondAttribute="trailing" id="lrB-tJ-7CJ"/>
+                <constraint firstAttribute="trailing" secondItem="4E1-j7-aia" secondAttribute="trailing" constant="30" id="mt5-TC-uaa"/>
+                <constraint firstItem="8Kb-Fi-GmD" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="oNR-Ux-jmz"/>
+                <constraint firstItem="1uf-L4-0aB" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="sJT-ah-a9q"/>
+                <constraint firstItem="4E1-j7-aia" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="30" id="uCA-Wa-lS8"/>
+                <constraint firstAttribute="trailing" secondItem="1uf-L4-0aB" secondAttribute="trailing" id="yRY-Wa-WT8"/>
+            </constraints>
+            <point key="canvasLocation" x="90" y="318.5"/>
+        </customView>
+    </objects>
+</document>

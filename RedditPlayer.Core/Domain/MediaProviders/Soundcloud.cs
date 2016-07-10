@@ -16,39 +16,42 @@ namespace RedditPlayer.Domain.MediaProviders
 
         readonly SoundcloudApi Api;
 
-        public Soundcloud(SoundcloudApi api, IPlayer player)
+        public Soundcloud (SoundcloudApi api, IPlayer player)
         {
             Player = player;
             Api = api;
         }
 
-        public bool IsValidUrl(string url)
+        public bool IsValidUrl (string url)
         {
-            return Regex.IsMatch(url, "soundcloud");
+            return Regex.IsMatch (url, "soundcloud");
         }
 
-        public async Task<IList<Track>> SearchTracks(string query)
+        public async Task<IList<Track>> SearchTracks (string query)
         {
-            return await Api.SearchTracks(this, query);
+            return await Api.SearchTracks (this, query);
         }
 
-        public async Task<IList<Artist>> SearchArtists(string query)
+        public async Task<IList<Artist>> SearchArtists (string query)
         {
-            return await Api.SearchUsers(this, query);
+            return await Api.SearchUsers (this, query);
         }
 
-        // TODO: Implement Soundcloud#GetAlbums(Artist artist)
-        public async Task<IList<Album>> GetAlbums(Artist artist)
+        public async Task<IList<Album>> GetAlbums (Artist artist)
         {
-            Debug.WriteLine("Soundcloud#GetAlbums is not implemented yet!");
-            return new List<Album>();
+            return new List<Album> ();
+        }
+
+        public async Task<IList<Playlist>> GetPlaylists (Artist artist)
+        {
+            return await Api.GetPlaylists (this, artist);
         }
 
         // TODO: Implement Soundcloud#GetPopularTracks(Artist artist)
-        public async Task<IList<Track>> GetPopularTracks(Artist artist)
+        public async Task<IList<Track>> GetPopularTracks (Artist artist)
         {
-            Debug.WriteLine("Soundcloud#GetPopularTracks is not implemented yet!");
-            return new List<Track>();
+            Debug.WriteLine ("Soundcloud#GetPopularTracks is not implemented yet!");
+            return new List<Track> ();
         }
     }
 }

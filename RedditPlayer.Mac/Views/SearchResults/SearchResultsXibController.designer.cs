@@ -19,13 +19,15 @@ namespace RedditPlayer.Mac.Views.SearchResults
 		RedditPlayer.Mac.Views.SearchResults.SearchResultsTabGroup tabGroup { get; set; }
 
 		[Outlet]
-		AppKit.NSTableView tableView { get; set; }
-
-		[Outlet]
 		AppKit.NSTabView tabView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (artistsCollectionView != null) {
+				artistsCollectionView.Dispose ();
+				artistsCollectionView = null;
+			}
+
 			if (tabGroup != null) {
 				tabGroup.Dispose ();
 				tabGroup = null;
@@ -34,16 +36,6 @@ namespace RedditPlayer.Mac.Views.SearchResults
 			if (tabView != null) {
 				tabView.Dispose ();
 				tabView = null;
-			}
-
-			if (tableView != null) {
-				tableView.Dispose ();
-				tableView = null;
-			}
-
-			if (artistsCollectionView != null) {
-				artistsCollectionView.Dispose ();
-				artistsCollectionView = null;
 			}
 		}
 	}

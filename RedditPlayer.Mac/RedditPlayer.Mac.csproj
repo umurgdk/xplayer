@@ -182,6 +182,10 @@
     <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist.png" />
     <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist%402x.png" />
     <ImageAsset Include="Assets.xcassets\Artist.imageset\Artist%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\PlusSmall.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\PlusSmall.imageset\PlusSmall.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\PlusSmall.imageset\PlusSmall%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\PlusSmall.imageset\PlusSmall%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -211,6 +215,7 @@
     <Folder Include="Assets.xcassets\Video.imageset\" />
     <Folder Include="Assets.xcassets\Artist.imageset\" />
     <Folder Include="Views\ArtistDetail\" />
+    <Folder Include="Views\Media\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -298,6 +303,36 @@
     <Compile Include="Views\SongsList\SongListViewController.designer.cs">
       <DependentUpon>SongListViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ViewPlaceholder.cs" />
+    <Compile Include="Views\XPTableView.cs" />
+    <Compile Include="Views\ArtistDetail\ArtistDetailHeaderViewController.cs" />
+    <Compile Include="Views\ArtistDetail\ArtistDetailHeaderViewController.designer.cs">
+      <DependentUpon>ArtistDetailHeaderViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ArtistDetail\HeaderView.cs" />
+    <Compile Include="Views\ArtistDetail\HeaderViewController.cs" />
+    <Compile Include="Views\ArtistDetail\HeaderView.designer.cs">
+      <DependentUpon>HeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ArtistDetail\HeaderViewController.designer.cs">
+      <DependentUpon>HeaderViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\AlbumGroupRowView.cs" />
+    <Compile Include="Views\Media\AlbumSongRowView.cs" />
+    <Compile Include="Views\Media\AlbumListView.cs" />
+    <Compile Include="Views\Media\AlbumListViewController.cs" />
+    <Compile Include="Views\Media\AlbumListView.designer.cs">
+      <DependentUpon>AlbumListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\AlbumListViewController.designer.cs">
+      <DependentUpon>AlbumListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataAdapters\IFloatingView.cs" />
+    <Compile Include="Views\Media\XPAlbumTableView.cs" />
+    <Compile Include="Views\Media\AlbumGroupRowView.designer.cs">
+      <DependentUpon>AlbumGroupRowView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BreadcrumbView.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />
@@ -305,6 +340,11 @@
     <InterfaceDefinition Include="Views\SearchResults\ArtistItemView.xib" />
     <InterfaceDefinition Include="Views\ArtistDetail\ArtistDetailView.xib" />
     <InterfaceDefinition Include="Views\SongsList\SongListView.xib" />
+    <InterfaceDefinition Include="Views\ArtistDetail\ArtistDetailHeaderView.xib" />
+    <InterfaceDefinition Include="Views\ArtistDetail\HeaderView.xib" />
+    <InterfaceDefinition Include="Views\Media\AlbumListView.xib" />
+    <InterfaceDefinition Include="Resources\Views\Media\AlbumGroupRowView.xib" />
+    <InterfaceDefinition Include="Resources\Views\Media\AlbumSongRowView.xib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RedditPlayer.Core\RedditPlayer.csproj">

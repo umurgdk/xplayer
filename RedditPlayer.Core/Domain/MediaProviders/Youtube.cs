@@ -63,6 +63,11 @@ namespace RedditPlayer.Domain.MediaProviders
             return new List<Artist> ();
         }
 
+        public async Task<IList<Playlist>> GetPlaylists (Artist artist)
+        {
+            return new List<Playlist> ();
+        }
+
         // TODO: Implement Youtube#GetAlbums(Artist artist)
         public async Task<IList<Album>> GetAlbums (Artist artist)
         {

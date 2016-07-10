@@ -10,9 +10,16 @@ using RedditPlayer.Mac.Views.SearchBar;
 using RedditPlayer.Mac.Views.Player;
 using RedditPlayer.Mac.Views.SearchResults;
 using RedditPlayer.Mac.Views.ArtistDetail;
+using System.Collections.Generic;
 
 namespace RedditPlayer.Mac.Views
 {
+    struct RouteItem
+    {
+        public string Identifier;
+        public NSView View;
+    }
+
     public class Navigator : INavigator
     {
         PlayerWindowController windowController;
@@ -23,11 +30,17 @@ namespace RedditPlayer.Mac.Views
 
         ApplicationViewModel appModel;
 
+        BreadcrumbView breadcrumbView;
+        Stack<RouteItem> history;
+
         public Navigator (ApplicationViewModel appModel, PlayerWindowController windowController, MainViewController mainViewController)
         {
             this.appModel = appModel;
             this.windowController = windowController;
             this.mainViewController = mainViewController;
+
+            history = new Stack<RouteItem> ();
+            breadcrumbView = new BreadcrumbView ();
         }
 
         public void PresentWelcomeScreen ()
@@ -39,8 +52,7 @@ namespace RedditPlayer.Mac.Views
                 detailViewController = new DetailViewController (appModel, searchBarViewController, playerViewController);
             }
 
-            detailViewController.SetContentView (new WelcomeView ());
-            windowController.PresentView (detailViewController.View);
+            PushView ("welcomeScreen", "Welcome Screen", new WelcomeView ());
         }
 
         public void PresentSearchResults ()
@@ -49,15 +61,14 @@ namespace RedditPlayer.Mac.Views
                 searchResultsViewController = new SearchResultsXibController (appModel);
             }
 
-            detailViewController.SetContentView (searchResultsViewController.View);
-            windowController.PresentView (detailViewController.View);
+            ResetHistory ();
+            PushView ("searchResults", "Search Results", searchResultsViewController.View);
         }
 
         public void PresentArtist (ArtistDetailViewModel artistViewModel)
         {
-            var viewController = new ArtistDetailViewController (artistViewModel);
-            detailViewController.SetContentView (viewController.View);
-            windowController.PresentView (detailViewController.View);
+            var viewController = new ArtistDetailViewController (artistViewModel, appModel.Player);
+            PushView ("artist", artistViewModel.Artist.Name, viewController.View);
         }
 
         public void PresentPlaylist ()
@@ -68,6 +79,40 @@ namespace RedditPlayer.Mac.Views
         public void ShowWindow (object sender)
         {
             windowController.ShowWindow (NSObject.FromObject (sender));
+        }
+
+        void PushView (string identifier, string title, NSView view)
+        {
+            history.Push (new RouteItem {
+                Identifier = identifier,
+                View = view
+            });
+
+            breadcrumbView.AddItem (identifier, title);
+
+            detailViewController.SetContentView (view);
+            windowController.PresentView (detailViewController.View);
+        }
+
+        void PopView ()
+        {
+            if (history.Count < 2)
+                return;
+
+            var item = history.Pop ();
+            breadcrumbView.RemoveItem (item.Identifier);
+
+            var previousItem = history.Peek ();
+            detailViewController.SetContentView (previousItem.View);
+        }
+
+        void ResetHistory ()
+        {
+            foreach (var route in history) {
+                breadcrumbView.RemoveItem (route.Identifier);
+            }
+
+            history.Clear ();
         }
     }
 }

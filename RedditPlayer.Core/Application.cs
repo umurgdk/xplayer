@@ -36,6 +36,7 @@ namespace RedditPlayer
             Debug.WriteLine ("Setting first run configurations!!!");
             settings.Volume = 1.0f;
             settings.FirstRun = false;
+            settings.NumberOfPopularSongs = 5;
         }
     }
 }

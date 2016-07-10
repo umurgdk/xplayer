@@ -23,6 +23,21 @@ namespace RedditPlayer.Mac.Views.SongsList
             Initialize ();
         }
 
+        public SongListView ()
+        {
+            Initialize ();
+        }
+
+        public SongListView (NSObjectFlag t) : base (t)
+        {
+            Initialize ();
+        }
+
+        public SongListView (CoreGraphics.CGRect frameRect) : base (frameRect)
+        {
+            Initialize ();
+        }
+
         // Shared initialization code
         void Initialize ()
         {

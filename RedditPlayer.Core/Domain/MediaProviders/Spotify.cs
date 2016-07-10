@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using RedditPlayer.Domain.Media;
 using System.Linq;
+using Splat;
+using RedditPlayer.Services;
 
 namespace RedditPlayer.Domain.MediaProviders
 {
@@ -31,9 +33,16 @@ namespace RedditPlayer.Domain.MediaProviders
         {
             var spArtist = await SpotifyWebAPI.Artist.GetArtist (artist.UniqueId);
             var albumPage = await spArtist.GetAlbums ();
-            var albums = await albumPage.ToList ();
+            var spAlbums = await albumPage.ToList ();
 
-            return albums.Select (FromSPAlbum).ToList ();
+            spAlbums = spAlbums.Aggregate (new Dictionary<string, SpotifyWebAPI.Album> (), (albumsDictionary, album) => {
+                albumsDictionary [album.Name] = album;
+                return albumsDictionary;
+            }).Values.ToList ();
+
+            var albums = await Task.WhenAll (spAlbums.Select (FromSPAlbum));
+
+            return albums.ToList ();
         }
 
         public async Task<IList<Track>> GetPopularTracks (Artist artist)
@@ -41,7 +50,14 @@ namespace RedditPlayer.Domain.MediaProviders
             var spArtist = await SpotifyWebAPI.Artist.GetArtist (artist.UniqueId);
             var popularSongs = await spArtist.GetTopTracks ();
 
+            var numberOfPopularSongs = Locator.CurrentMutable.GetService<ISettings> ().NumberOfPopularSongs;
+
             return popularSongs.Select (FromSPTrack).ToList ();
+        }
+
+        public async Task<IList<Playlist>> GetPlaylists (Artist artist)
+        {
+            return new List<Playlist> ();
         }
 
         Artist FromSPArtist (SpotifyWebAPI.Artist spArtist)
@@ -70,20 +86,25 @@ namespace RedditPlayer.Domain.MediaProviders
 
             var track = new Track (spTrack.Id, title, imageUrl, TimeSpan.FromMilliseconds (spTrack.Duration), this);
             track.ArtistId = spTrack.Artists [0].Id;
-            track.AlbumId = spTrack.Album.Id;
+            //track.AlbumId = spTrack.Album.Id;
+            track.OrderInAlbum = spTrack.TrackNumber;
 
             return track;
         }
 
-        Album FromSPAlbum (SpotifyWebAPI.Album spAlbum)
+        async Task<Album> FromSPAlbum (SpotifyWebAPI.Album spAlbum)
         {
             string imageUrl = null;
             if (spAlbum.Images.Count > 0) {
                 imageUrl = spAlbum.Images [0].Url;
             }
 
+            var tracksPage = await spAlbum.GetAlbumTracks ();
+            var tracks = await tracksPage.ToList ();
+
             var album = new Album (spAlbum.Name, spAlbum.Id, imageUrl, this);
-            album.ArtistId = spAlbum.Artists [0].Id;
+            album.Tracks = tracks.Select (FromSPTrack).ToList ();
+            album.ReleaseDate = spAlbum.ReleaseDate;
 
             return album;
         }

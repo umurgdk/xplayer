@@ -19,6 +19,10 @@ namespace RedditPlayer.Mac.Views.Detail
 
         NSLayoutConstraint [] contentViewConstraints;
 
+        public BreadcrumbView BreadcrumbView { get; protected set; }
+
+        NSLayoutConstraint [] breadcrumbViewConstraints;
+
         public DetailView (SearchBarView searchBarView, PlayerView playerView)
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
@@ -29,6 +33,8 @@ namespace RedditPlayer.Mac.Views.Detail
 
             PlayerView = playerView;
             PlayerView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
+
+            BreadcrumbView = new BreadcrumbView ();
 
             AddSubview (SearchBarView);
             AddSubview (PlayerView);
@@ -79,6 +85,18 @@ namespace RedditPlayer.Mac.Views.Detail
             constraints.Add (PinBottom (view));
 
             contentViewConstraints = constraints.ToArray ();
+        }
+
+        void ShowBreadcrumb ()
+        {
+            if (BreadcrumbView.Superview == this)
+                return;
+
+            AddSubview (BreadcrumbView);
+
+            var breadcrumbConstraints = new List<NSLayoutConstraint> ();
+            breadcrumbConstraints.AddRange (FillHorizontal (BreadcrumbView, false));
+            breadcrumbConstraints.Add (PinTop (BreadcrumbView));
         }
     }
 }

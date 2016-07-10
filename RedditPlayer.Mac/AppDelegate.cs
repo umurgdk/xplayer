@@ -6,6 +6,7 @@ using RedditPlayer.Mac.Services;
 using RedditPlayer.Mac.Views;
 using RedditPlayer.Services;
 using Splat;
+using System;
 
 namespace RedditPlayer.Mac
 {
@@ -17,6 +18,7 @@ namespace RedditPlayer.Mac
 
         public AppDelegate ()
         {
+
             NSUserDefaults.StandardUserDefaults.SetBool (true, "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints");
             NSUserDefaults.StandardUserDefaults.SetBool (true, "WebKitDeveloperExtras");
 

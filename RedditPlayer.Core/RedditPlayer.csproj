@@ -63,6 +63,8 @@
     <Compile Include="Services\ISettings.cs" />
     <Compile Include="Domain\MediaProviders\Spotify.cs" />
     <Compile Include="ViewModels\ArtistDetailViewModel.cs" />
+    <Compile Include="Domain\Media\Playlist.cs" />
+    <Compile Include="ViewModels\TrackListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Google.Apis">

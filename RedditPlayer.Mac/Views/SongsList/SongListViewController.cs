@@ -13,17 +13,9 @@ namespace RedditPlayer.Mac.Views.SongsList
         const string TitleIdentifier = "Title";
         const string DurationIdentifier = "Duration";
 
-        public IList<Track> Tracks { get; protected set; }
+        IList<Track> tracks;
 
-        public delegate void SongDoubleClickedHandler (Track track);
-        public event SongDoubleClickedHandler SongDoubleClicked;
-
-        NSLayoutConstraint scrollViewConstraint;
-
-        public SongListViewController (IList<Track> tracks) : base ("SongListView", NSBundle.MainBundle)
-        {
-            Tracks = tracks;
-        }
+        public NSTableView TableView => tableView;
 
         //strongly typed view accessor
         public new SongListView View
@@ -34,8 +26,65 @@ namespace RedditPlayer.Mac.Views.SongsList
             }
         }
 
+        public IList<Track> Tracks
+        {
+            get
+            {
+                return tracks;
+            }
+
+            set
+            {
+                tracks = value;
+
+                if (tableView != null) {
+                    tableView.ReloadData ();
+                    tableView.InvalidateIntrinsicContentSize ();
+                }
+
+            }
+        }
+
+
+        public delegate void SongDoubleClickedHandler (Track track);
+        public event SongDoubleClickedHandler SongDoubleClicked;
+
+        NSLayoutConstraint scrollViewConstraint;
+
+        public SongListViewController (NSCoder coder) : base (coder)
+        {
+            Initialize ();
+        }
+
+        public SongListViewController (NSObjectFlag t) : base (t)
+        {
+            Initialize ();
+        }
+
+        public SongListViewController (IntPtr handle) : base (handle)
+        {
+            Initialize ();
+        }
+
+        public SongListViewController () : base ("SongListView", NSBundle.MainBundle)
+        {
+            Initialize ();
+        }
+
+        void Initialize ()
+        {
+            Tracks = new List<Track> ();
+        }
+
+        public void ReloadData ()
+        {
+            tableView.ReloadData ();
+        }
+
         public override void ViewDidLoad ()
         {
+            base.ViewDidLoad ();
+            tableView.TranslatesAutoresizingMaskIntoConstraints = false;
             tableView.DoubleClick += OnSongDoubleClicked;
         }
 
@@ -86,7 +135,7 @@ namespace RedditPlayer.Mac.Views.SongsList
 
             if (tableColumn.Identifier == DurationIdentifier) {
                 var view = tableView.MakeView (DurationIdentifier, this) as NSTableCellView;
-                view.TextField.StringValue = track.Duration.ToString ("m:s");
+                view.TextField.StringValue = track.Duration.ToString (@"m\:s");
                 return view;
             }
 

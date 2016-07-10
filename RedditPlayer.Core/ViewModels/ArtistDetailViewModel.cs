@@ -13,9 +13,11 @@ namespace RedditPlayer.ViewModels
 
         public ReactiveList<Track> PopularSongs { get; protected set; }
         public ReactiveList<Album> Albums { get; protected set; }
+        public ReactiveList<Playlist> Playlists { get; protected set; }
 
-        public ReactiveCommand<IList<Track>> LoadPopularSongs;
-        public ReactiveCommand<IList<Album>> LoadAlbums;
+        public ReactiveCommand<IList<Track>> LoadPopularSongs { get; protected set; }
+        public ReactiveCommand<IList<Album>> LoadAlbums { get; protected set; }
+        public ReactiveCommand<IList<Playlist>> LoadPlaylists { get; protected set; }
 
         public ArtistDetailViewModel (Artist artist)
         {
@@ -23,12 +25,14 @@ namespace RedditPlayer.ViewModels
 
             PopularSongs = new ReactiveList<Track> ();
             Albums = new ReactiveList<Album> ();
+            Playlists = new ReactiveList<Playlist> ();
 
             var artistAvailable = this.WhenAnyValue (vm => vm.Artist)
                                       .Select (val => val != null);
 
             LoadPopularSongs = ReactiveCommand.CreateAsyncTask (artistAvailable, _ => Artist.MediaProvider.GetPopularTracks (Artist));
             LoadAlbums = ReactiveCommand.CreateAsyncTask (artistAvailable, _ => Artist.MediaProvider.GetAlbums (Artist));
+            LoadPlaylists = ReactiveCommand.CreateAsyncTask (artistAvailable, _ => Artist.MediaProvider.GetPlaylists (Artist));
 
             LoadPopularSongs.Subscribe (tracks => {
                 using (PopularSongs.SuppressChangeNotifications ()) {
@@ -41,6 +45,13 @@ namespace RedditPlayer.ViewModels
                 using (Albums.SuppressChangeNotifications ()) {
                     Albums.Clear ();
                     Albums.AddRange (albums);
+                }
+            });
+
+            LoadPlaylists.Subscribe (playlists => {
+                using (Playlists.SuppressChangeNotifications ()) {
+                    Playlists.Clear ();
+                    Playlists.AddRange (playlists);
                 }
             });
         }

@@ -30,19 +30,33 @@ namespace RedditPlayer.Mac.DataAdapters
             }
         }
 
+        public override bool GroupRowStyle
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+                base.GroupRowStyle = value;
+            }
+        }
+
+        float? normalHeight = 0;
+
         public BorderLocation BorderLocations { get; set; } = BorderLocation.None;
         public NSColor BorderColor { get; set; }
 
         public GrayRowView ()
         {
-            WantsLayer = true;
-            Layer.BackgroundColor = NSColor.White.CGColor;
         }
 
         public override void DrawBackground (CoreGraphics.CGRect dirtyRect)
         {
             NSColor.White.Set ();
             NSBezierPath.FillRect (dirtyRect);
+
+            this.DrawSeparator (dirtyRect);
         }
 
         public override void DrawSelection (CoreGraphics.CGRect dirtyRect)

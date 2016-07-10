@@ -13,7 +13,7 @@ namespace RedditPlayer.Mac.Views.SongsList
 	partial class SongListViewController
 	{
 		[Outlet]
-		AppKit.NSTableView tableView { get; set; }
+		RedditPlayer.Mac.Views.XPTableView tableView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

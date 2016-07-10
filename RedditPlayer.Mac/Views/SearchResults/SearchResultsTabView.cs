@@ -25,13 +25,25 @@ namespace RedditPlayer.Mac.Views.SearchResults
             set
             {
                 selected = value;
+                if (selected && darkTheme)
+                    TextField.TextColor = NSColor.Black;
+                if (!selected && darkTheme)
+                    TextField.TextColor = NSColor.FromDeviceWhite (1.0f, 1.0f);
+
                 NeedsDisplay = true;
             }
         }
 
-        public SearchResultsTabView ()
+        bool darkTheme;
+
+        public SearchResultsTabView () : this (false)
         {
-            WantsLayer = true;
+        }
+
+        public SearchResultsTabView (bool darkTheme)
+        {
+            this.darkTheme = darkTheme;
+
             TranslatesAutoresizingMaskIntoConstraints = false;
 
             ImageView = new NSImageView ();
@@ -40,6 +52,7 @@ namespace RedditPlayer.Mac.Views.SearchResults
             AddSubview (ImageView);
 
             TextField = NSLabel.CreateWithFont ("SF UI Text", 14);
+            TextField.TextColor = darkTheme ? NSColor.FromDeviceWhite (1.0f, 0.0f) : NSColor.FromDeviceWhite (0, 1);
 
             AddSubview (TextField);
 
@@ -59,20 +72,19 @@ namespace RedditPlayer.Mac.Views.SearchResults
             if (Selected) {
                 NSColor.White.SetFill ();
                 NSBezierPath.FillRect (dirtyRect);
-            } else {
+            } else if (!darkTheme) {
                 NSColor.FromRgb (245, 245, 245).Set ();
                 NSBezierPath.FillRect (dirtyRect);
             }
 
-            NSColor.FromRgb (233, 233, 233).Set ();
-
-            // Draw bottom border
-            //if (!Selected) {
-            NSBezierPath.FillRect (new CGRect (dirtyRect.X, 0, dirtyRect.Width, 1));
-            //}
-
-            // Draw right border
-            NSBezierPath.FillRect (new CGRect (dirtyRect.Right - 1, 0, 1, dirtyRect.Height));
+            if (!darkTheme) {
+                NSColor.FromRgb (233, 233, 233).Set ();
+                NSBezierPath.FillRect (new CGRect (dirtyRect.X, 0, dirtyRect.Width, 1));
+                NSBezierPath.FillRect (new CGRect (dirtyRect.Right - 1, 0, 1, dirtyRect.Height));
+            } else if (!Selected) {
+                NSColor.FromWhite (1.0f, 0.21f).Set ();
+                NSBezierPath.FillRect (new CGRect (dirtyRect.Right - 1, 0, 1, dirtyRect.Height));
+            }
         }
     }
 }

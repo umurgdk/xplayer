@@ -70,6 +70,85 @@ namespace RedditPlayer.Mac.Views.SongsList
             }
         }
 
+        public override CGRect Frame
+        {
+            get
+            {
+                return base.Frame;
+            }
+            set
+            {
+                base.Frame = value;
+                NeedsDisplay = true;
+            }
+        }
+
+        float overlayAlpha = 0;
+        public float OverlayAlpha
+        {
+            get
+            {
+                return overlayAlpha;
+            }
+
+            set
+            {
+                overlayAlpha = value;
+                NeedsDisplay = true;
+            }
+        }
+
+        NSColor overlayColor = NSColor.Black;
+        public NSColor OverlayColor
+        {
+            get
+            {
+                return overlayColor;
+            }
+
+            set
+            {
+                overlayColor = value;
+                NeedsDisplay = true;
+            }
+        }
+
+        CALayer overlayLayer;
+
+        public float BorderWidth
+        {
+            get
+            {
+                return (float)Layer.BorderWidth;
+            }
+
+            set
+            {
+                Layer.BorderWidth = value;
+                NeedsDisplay = true;
+            }
+        }
+
+        public CGColor BorderColor
+        {
+            get
+            {
+                return Layer.BorderColor;
+            }
+
+            set
+            {
+                Layer.BorderColor = value;
+                NeedsDisplay = true;
+            }
+        }
+
+        public override void SetFrameSize (CGSize newSize)
+        {
+            base.SetFrameSize (newSize);
+            NeedsDisplay = true;
+        }
+
         public void SetImageAsync (string url)
         {
             if (url == null) {
@@ -141,7 +220,6 @@ namespace RedditPlayer.Mac.Views.SongsList
                 }
 
                 imageLayer = CALayer.Create ();
-                imageLayer.Frame = Bounds;
                 imageLayer.Mask = maskLayer;
                 imageLayer.MasksToBounds = true;
 
@@ -156,6 +234,33 @@ namespace RedditPlayer.Mac.Views.SongsList
             if (image == null) {
                 imageLayer?.RemoveFromSuperLayer ();
             }
+
+            if (overlayAlpha > 0 && overlayLayer == null) {
+                overlayLayer = new CALayer ();
+                overlayLayer.BackgroundColor = overlayColor.ColorWithAlphaComponent (overlayAlpha).CGColor;
+                Layer.AddSublayer (overlayLayer);
+            }
+
+            if (overlayAlpha == 0 && overlayLayer != null) {
+                overlayLayer.RemoveFromSuperLayer ();
+                overlayLayer = null;
+            }
+
+            CATransaction.Begin ();
+            CATransaction.DisableActions = true;
+
+            if (imageLayer != null) {
+                if (imageLayer.Bounds.Width != Bounds.Width) {
+                    imageLayer.Frame = Bounds;
+                    maskLayer.Path = CGPath.FromRoundedRect (Bounds, cornerRadius, cornerRadius);
+                }
+            }
+
+            if (overlayLayer != null && overlayLayer.SuperLayer != null && overlayLayer.Frame != Bounds) {
+                overlayLayer.Frame = Bounds;
+            }
+
+            CATransaction.Commit ();
         }
     }
 }

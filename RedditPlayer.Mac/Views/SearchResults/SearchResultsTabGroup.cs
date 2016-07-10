@@ -1,13 +1,16 @@
 using System;
-using AppKit;
-using Foundation;
 using System.Collections.Generic;
-using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
+using AppKit;
 using CoreGraphics;
+using Foundation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
+
 namespace RedditPlayer.Mac.Views.SearchResults
 {
     [Register ("SearchResultsTabGroup")]
-    public class SearchResultsTabGroup : NSView
+    public class SearchResultsTabGroup : ReactiveView
     {
         NSStackView tabsStack;
         Dictionary<string, SearchResultsTabView> tabViews;
@@ -15,6 +18,9 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
         public delegate void ActiveTabChangedHandler (string identifier);
         public event ActiveTabChangedHandler ActiveTabChanged;
+
+        [Reactive]
+        public bool DarkTheme { get; set; }
 
         #region Constructors
 
@@ -45,17 +51,17 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
         #endregion
 
+        //public override bool IsOpaque => true;
+
         void Initialize ()
         {
-            WantsLayer = true;
+            //WantsLayer = true;
             TranslatesAutoresizingMaskIntoConstraints = false;
 
             tabsStack = new NSStackView ();
             tabsStack.TranslatesAutoresizingMaskIntoConstraints = false;
             tabsStack.Orientation = NSUserInterfaceLayoutOrientation.Horizontal;
             tabsStack.Spacing = 0;
-
-            Layer.BackgroundColor = NSColor.FromRgb (245, 245, 245).CGColor;
 
             AddSubview (tabsStack);
 
@@ -67,7 +73,10 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
         public void AddTab (string identifier, string iconName, string title)
         {
-            var tabView = new SearchResultsTabView ();
+            if (tabViews.ContainsKey (identifier))
+                return;
+
+            var tabView = new SearchResultsTabView (DarkTheme);
 
             tabView.ImageView.Image = NSImage.ImageNamed (iconName);
             tabView.TextField.StringValue = title;
@@ -78,9 +87,11 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
         public void RemoveTab (string identifier)
         {
-            var tabView = tabViews [identifier];
-            tabsStack.RemoveArrangedSubview (tabView);
-            tabViews.Remove (identifier);
+            if (tabViews.ContainsKey (identifier)) {
+                var tabView = tabViews [identifier];
+                tabsStack.RemoveArrangedSubview (tabView);
+                tabViews.Remove (identifier);
+            }
         }
 
         public void ActivateTab (string identifier)
@@ -101,7 +112,13 @@ namespace RedditPlayer.Mac.Views.SearchResults
 
         public override void DrawRect (CoreGraphics.CGRect dirtyRect)
         {
-            if (dirtyRect.Y == 0) {
+            if (DarkTheme) {
+                NSColor.Clear.Set ();
+                NSGraphics.RectFill (dirtyRect, NSCompositingOperation.SourceOver);
+                return;
+            }
+
+            if (dirtyRect.Y == 0 && !DarkTheme) {
                 NSColor.FromRgb (233, 233, 233).Set ();
                 NSBezierPath.FillRect (new CGRect (dirtyRect.X, 0, dirtyRect.Width, 1));
             }

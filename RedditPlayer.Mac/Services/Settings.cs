@@ -39,6 +39,23 @@ namespace RedditPlayer.Mac.Services
             }
         }
 
+        public int NumberOfPopularSongs
+        {
+            get
+            {
+                try {
+                    return (int)NSUserDefaults.StandardUserDefaults.IntForKey ("NumberOfPopularSongs");
+                } catch {
+                    return 5;
+                }
+            }
+
+            set
+            {
+                NSUserDefaults.StandardUserDefaults.SetInt (value, "NumberOfPopularSongs");
+            }
+        }
+
         public void RemoveAll ()
         {
             NSUserDefaults.StandardUserDefaults.RemoveObject ("FirstRun");

@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Foundation;
 using AppKit;
-using RedditPlayer.Mac.Extensions;
 using ReactiveUI;
-using System.Threading.Tasks;
 using RedditPlayer.Mac.Views.SongsList;
-using RedditPlayer.ViewModels;
-using Splat;
-using RedditPlayer.Services;
+using RedditPlayer.Domain.Media;
+using static RedditPlayer.Mac.Extensions.NSLayoutExtensions;
 
 namespace RedditPlayer.Mac.Views.SearchResults
 {
     public partial class SearchResultsXibController : ReactiveViewController, INSTableViewDelegate, INSTableViewDataSource, INSCollectionViewDataSource, INSCollectionViewDelegate
     {
         ApplicationViewModel viewModel;
+
+        SongListViewController songListViewController;
 
         #region Constructors
 
@@ -38,7 +35,7 @@ namespace RedditPlayer.Mac.Views.SearchResults
             Initialize ();
             this.viewModel = viewModel;
 
-            viewModel.Search.Tracks.Changed.Subscribe (_ => tableView.ReloadData ());
+            viewModel.Search.Tracks.Changed.Subscribe (_ => songListViewController.Tracks = viewModel.Search.Tracks);
             viewModel.Search.Artists.Changed.Subscribe (_ => {
                 artistsCollectionView.ReloadData ();
             });
@@ -67,8 +64,17 @@ namespace RedditPlayer.Mac.Views.SearchResults
             View.Identifier = "SearchResultsXibView";
             View.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            tableView.ReloadData ();
-            tableView.DoubleClick += TableDoubleClicked;
+            songListViewController = new SongListViewController ();
+
+            var itemIndex = tabView.IndexOf (new NSString ("songs"));
+            var tabViewItem = tabView.Items [itemIndex];
+            tabViewItem.View.AddSubview (songListViewController.View);
+
+            tabViewItem.View.AddConstraints (FillHorizontal (songListViewController.View, false));
+            tabViewItem.View.AddConstraints (FillVertical (songListViewController.View, false));
+
+            songListViewController.Tracks = viewModel.Search.Tracks;
+            songListViewController.SongDoubleClicked += DidSongDoubleClicked;
 
             tabGroup.AddTab ("songs", "Playlist", "Tracks");
             tabGroup.AddTab ("videos", "Video", "Videos");
@@ -123,13 +129,9 @@ namespace RedditPlayer.Mac.Views.SearchResults
             return null;
         }
 
-        void TableDoubleClicked (object sender, EventArgs e)
+        void DidSongDoubleClicked (Track track)
         {
-            var row = (int)tableView.ClickedRow;
-
-            if (row < viewModel.Search.Tracks.Count) {
-                viewModel.Player.Play (viewModel.Search.Tracks [row]);
-            }
+            viewModel.Player.Play (track);
         }
 
         void OnActiveTabChanged (string identifier)
