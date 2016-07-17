@@ -55,6 +55,11 @@ namespace RedditPlayer.Tests.Domain.MediaProviders
         {
             throw new NotImplementedException ();
         }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

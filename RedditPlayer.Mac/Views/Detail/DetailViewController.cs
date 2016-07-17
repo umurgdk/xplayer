@@ -8,23 +8,33 @@ using RedditPlayer.Mac.Views.Player;
 
 namespace RedditPlayer.Mac.Views.Detail
 {
-    public class DetailViewController : ReactiveViewController, IDisposable
-    {
-        public new DetailView View
-        {
-            get { return (DetailView)base.View; }
-            set { base.View = value; }
-        }
+	public class DetailViewController : ReactiveViewController, IDisposable
+	{
+		public new DetailView View
+		{
+			get { return (DetailView)base.View; }
+			set { base.View = value; }
+		}
 
-        public DetailViewController (ApplicationViewModel appModel, SearchBarViewController searchBarViewController, PlayerViewController playerViewController)
-        {
-            View = new DetailView (searchBarViewController.View, playerViewController.View);
-        }
+		public DetailViewController (ApplicationViewModel appModel, SearchBarViewController searchBarViewController, PlayerViewController playerViewController)
+		{
+			View = new DetailView (searchBarViewController.View, playerViewController.View);
+		}
 
-        public void SetContentView (NSView contentView)
-        {
-            View.SetContentView (contentView);
-        }
-    }
+		public void SetContentView (NSView contentView)
+		{
+			View.SetContentView (contentView);
+		}
+
+		public void ShowBreadcrumb ()
+		{
+			View.ShowBreadcrumb ();
+		}
+
+		public void HideBreadcrumb ()
+		{
+			View.HideBreadcrumb ();
+		}
+	}
 }
 

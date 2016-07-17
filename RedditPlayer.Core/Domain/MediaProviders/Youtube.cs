@@ -25,7 +25,7 @@ namespace RedditPlayer.Domain.MediaProviders
             });
         }
 
-        async Task<IList<Track>> GetTrackForId (params string [] ids)
+        public async Task<IList<Track>> GetTrackForId (params string [] ids)
         {
             var request = service.Videos.List ("id,snippet,contentDetails");
             request.Id = string.Join (",", ids);

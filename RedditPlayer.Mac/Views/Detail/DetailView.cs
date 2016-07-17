@@ -9,95 +9,127 @@ using System.Collections.Generic;
 
 namespace RedditPlayer.Mac.Views.Detail
 {
-    public class DetailView : ReactiveView, IDisposable
-    {
-        public readonly SearchBarView SearchBarView;
+	public class DetailView : ReactiveView, IDisposable
+	{
+		public readonly SearchBarView SearchBarView;
 
-        public readonly PlayerView PlayerView;
+		public readonly PlayerView PlayerView;
 
-        public NSView ContentView { get; protected set; }
+		public NSView ContentView { get; protected set; }
 
-        NSLayoutConstraint [] contentViewConstraints;
+		NSLayoutConstraint [] contentViewConstraints;
 
-        public BreadcrumbView BreadcrumbView { get; protected set; }
+		public BreadcrumbView BreadcrumbView { get; protected set; }
 
-        NSLayoutConstraint [] breadcrumbViewConstraints;
+		NSLayoutConstraint [] breadcrumbViewConstraints;
 
-        public DetailView (SearchBarView searchBarView, PlayerView playerView)
-        {
-            TranslatesAutoresizingMaskIntoConstraints = false;
-            WantsLayer = true;
+		public DetailView (SearchBarView searchBarView, PlayerView playerView)
+		{
+			TranslatesAutoresizingMaskIntoConstraints = false;
+			WantsLayer = true;
 
-            SearchBarView = searchBarView;
-            SearchBarView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
+			SearchBarView = searchBarView;
+			SearchBarView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
-            PlayerView = playerView;
-            PlayerView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
+			PlayerView = playerView;
+			PlayerView.SetContentHuggingPriorityForOrientation (251, NSLayoutConstraintOrientation.Vertical);
 
-            BreadcrumbView = new BreadcrumbView ();
+			BreadcrumbView = new BreadcrumbView ();
 
-            AddSubview (SearchBarView);
-            AddSubview (PlayerView);
+			AddSubview (SearchBarView);
+			AddSubview (PlayerView);
 
-            AddDefaultLayoutConstraints ();
-        }
+			AddDefaultLayoutConstraints ();
+		}
 
-        public override void ViewDidMoveToWindow ()
-        {
-            base.ViewDidMoveToWindow ();
-        }
+		public override void ViewDidMoveToWindow ()
+		{
+			base.ViewDidMoveToWindow ();
+		}
 
-        public void SetContentView (NSView view)
-        {
-            if (view == ContentView)
-                return;
+		public void SetContentView (NSView view)
+		{
+			if (view == ContentView)
+				return;
 
-            if (ContentView != null)
-                ContentView.RemoveFromSuperview ();
+			if (ContentView != null)
+				ContentView.RemoveFromSuperview ();
 
-            if (contentViewConstraints != null) {
-                RemoveConstraints (contentViewConstraints);
-            }
+			if (contentViewConstraints != null) {
+				RemoveConstraints (contentViewConstraints);
+			}
 
-            ContentView = view;
+			ContentView = view;
 
-            AddSubview (view, NSWindowOrderingMode.Below, SearchBarView);
+			AddSubview (view, NSWindowOrderingMode.Below, SearchBarView);
 
-            CreateContentViewConstraints (view);
-            AddConstraints (contentViewConstraints);
-        }
+			CreateContentViewConstraints (view);
+			AddConstraints (contentViewConstraints);
+		}
 
-        void AddDefaultLayoutConstraints ()
-        {
-            AddConstraint (PinTop (SearchBarView));
-            AddConstraints (FillHorizontal (SearchBarView, false));
+		void AddDefaultLayoutConstraints ()
+		{
+			AddConstraint (PinTop (SearchBarView));
+			AddConstraints (FillHorizontal (SearchBarView, false));
 
-            AddConstraints (FillHorizontal (PlayerView, false));
-            AddConstraint (PinBottom (PlayerView));
-            AddConstraint (MinimumWidth (this, 400));
-        }
+			AddConstraints (FillHorizontal (PlayerView, false));
+			AddConstraint (PinBottom (PlayerView));
+			AddConstraint (MinimumWidth (this, 400));
+		}
 
-        void CreateContentViewConstraints (NSView view)
-        {
-            var constraints = new List<NSLayoutConstraint> ();
-            constraints.AddRange (FillHorizontal (view, false));
-            constraints.AddRange (StackVertical (0, SearchBarView, view));
-            constraints.Add (PinBottom (view));
+		void CreateContentViewConstraints (NSView view)
+		{
+			var constraints = new List<NSLayoutConstraint> ();
+			constraints.AddRange (FillHorizontal (view, false));
 
-            contentViewConstraints = constraints.ToArray ();
-        }
+			if (BreadcrumbView.Superview == this) {
+				constraints.AddRange (StackVertical (0, SearchBarView, BreadcrumbView, view));
+			} else {
+				constraints.AddRange (StackVertical (0, SearchBarView, view));
+			}
+			constraints.Add (PinBottom (view));
 
-        void ShowBreadcrumb ()
-        {
-            if (BreadcrumbView.Superview == this)
-                return;
+			contentViewConstraints = constraints.ToArray ();
+		}
 
-            AddSubview (BreadcrumbView);
+		public void ShowBreadcrumb ()
+		{
+			if (BreadcrumbView.Superview == this)
+				return;
 
-            var breadcrumbConstraints = new List<NSLayoutConstraint> ();
-            breadcrumbConstraints.AddRange (FillHorizontal (BreadcrumbView, false));
-            breadcrumbConstraints.Add (PinTop (BreadcrumbView));
-        }
-    }
+			AddSubview (BreadcrumbView);
+
+			var breadcrumbConstraints = new List<NSLayoutConstraint> ();
+			breadcrumbConstraints.AddRange (FillHorizontal (BreadcrumbView, false));
+			breadcrumbConstraints.AddRange (StackVertical (0, SearchBarView, BreadcrumbView));
+
+			breadcrumbViewConstraints = breadcrumbConstraints.ToArray ();
+
+			AddConstraints (breadcrumbViewConstraints);
+
+			if (ContentView != null) {
+				RemoveConstraints (contentViewConstraints);
+				CreateContentViewConstraints (ContentView);
+
+				AddConstraints (contentViewConstraints);
+			}
+		}
+
+		public void HideBreadcrumb ()
+		{
+			if (BreadcrumbView.Superview != this) {
+				return;
+			}
+
+			BreadcrumbView.RemoveFromSuperview ();
+			RemoveConstraints (breadcrumbViewConstraints);
+
+			if (ContentView != null) {
+				RemoveConstraints (contentViewConstraints);
+				CreateContentViewConstraints (ContentView);
+				AddConstraints (contentViewConstraints);
+			}
+		}
+	}
 }
 

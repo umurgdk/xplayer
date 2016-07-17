@@ -57,6 +57,11 @@ namespace RedditPlayer.Tests
         {
             throw new NotImplementedException();
         }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

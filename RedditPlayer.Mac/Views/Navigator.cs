@@ -14,106 +14,138 @@ using System.Collections.Generic;
 
 namespace RedditPlayer.Mac.Views
 {
-    struct RouteItem
-    {
-        public string Identifier;
-        public NSView View;
-    }
+	struct RouteItem
+	{
+		public string Identifier;
+		public NSView View;
+	}
 
-    public class Navigator : INavigator
-    {
-        PlayerWindowController windowController;
-        DetailViewController detailViewController;
-        MainViewController mainViewController;
-        PlaylistsViewController playlistViewController;
-        SearchResultsXibController searchResultsViewController;
+	public class Navigator : INavigator
+	{
+		PlayerWindowController windowController;
+		DetailViewController detailViewController;
+		MainViewController mainViewController;
+		PlaylistsViewController playlistViewController;
+		SearchResultsXibController searchResultsViewController;
 
-        ApplicationViewModel appModel;
+		ApplicationViewModel appModel;
 
-        BreadcrumbView breadcrumbView;
-        Stack<RouteItem> history;
+		BreadcrumbView breadcrumbView;
+		Stack<RouteItem> history;
 
-        public Navigator (ApplicationViewModel appModel, PlayerWindowController windowController, MainViewController mainViewController)
-        {
-            this.appModel = appModel;
-            this.windowController = windowController;
-            this.mainViewController = mainViewController;
+		public Navigator (ApplicationViewModel appModel, PlayerWindowController windowController, MainViewController mainViewController)
+		{
+			this.appModel = appModel;
+			this.windowController = windowController;
+			this.mainViewController = mainViewController;
 
-            history = new Stack<RouteItem> ();
-            breadcrumbView = new BreadcrumbView ();
-        }
+			history = new Stack<RouteItem> ();
+		}
 
-        public void PresentWelcomeScreen ()
-        {
-            if (detailViewController == null) {
-                var searchBarViewController = new SearchBarViewController (appModel.Search);
-                var playerViewController = new PlayerViewController (appModel.Player);
+		public void PresentWelcomeScreen ()
+		{
+			if (detailViewController == null) {
+				var searchBarViewController = new SearchBarViewController (appModel.Search);
+				var playerViewController = new PlayerViewController (appModel.Player);
 
-                detailViewController = new DetailViewController (appModel, searchBarViewController, playerViewController);
-            }
+				detailViewController = new DetailViewController (appModel, searchBarViewController, playerViewController);
+				breadcrumbView = detailViewController.View.BreadcrumbView;
+				breadcrumbView.NavigationRequested += NavigateTo;
+			}
 
-            PushView ("welcomeScreen", "Welcome Screen", new WelcomeView ());
-        }
+			PushView ("welcomeScreen", "Welcome Screen", new WelcomeView ());
+		}
 
-        public void PresentSearchResults ()
-        {
-            if (searchResultsViewController == null) {
-                searchResultsViewController = new SearchResultsXibController (appModel);
-            }
+		public void PresentSearchResults ()
+		{
+			if (searchResultsViewController == null) {
+				searchResultsViewController = new SearchResultsXibController (appModel);
+			}
 
-            ResetHistory ();
-            PushView ("searchResults", "Search Results", searchResultsViewController.View);
-        }
+			ResetHistory ();
+			PushView ("searchResults", "Search Results", searchResultsViewController.View);
+		}
 
-        public void PresentArtist (ArtistDetailViewModel artistViewModel)
-        {
-            var viewController = new ArtistDetailViewController (artistViewModel, appModel.Player);
-            PushView ("artist", artistViewModel.Artist.Name, viewController.View);
-        }
+		public void PresentArtist (ArtistDetailViewModel artistViewModel)
+		{
+			var viewController = new ArtistDetailViewController (artistViewModel, appModel.Player);
+			PushView ("artist", artistViewModel.Artist.Name, viewController.View);
+		}
 
-        public void PresentPlaylist ()
-        {
-            throw new NotImplementedException ();
-        }
+		public void PresentPlaylist ()
+		{
+			throw new NotImplementedException ();
+		}
 
-        public void ShowWindow (object sender)
-        {
-            windowController.ShowWindow (NSObject.FromObject (sender));
-        }
+		public void ShowWindow (object sender)
+		{
+			windowController.ShowWindow (NSObject.FromObject (sender));
+		}
 
-        void PushView (string identifier, string title, NSView view)
-        {
-            history.Push (new RouteItem {
-                Identifier = identifier,
-                View = view
-            });
+		void PushView (string identifier, string title, NSView view)
+		{
+			history.Push (new RouteItem {
+				Identifier = identifier,
+				View = view
+			});
 
-            breadcrumbView.AddItem (identifier, title);
+			breadcrumbView.AddItem (identifier, title);
 
-            detailViewController.SetContentView (view);
-            windowController.PresentView (detailViewController.View);
-        }
+			detailViewController.SetContentView (view);
+			windowController.PresentView (detailViewController.View);
 
-        void PopView ()
-        {
-            if (history.Count < 2)
-                return;
+			if (history.Count > 1) {
+				detailViewController.ShowBreadcrumb ();
+			}
+		}
 
-            var item = history.Pop ();
-            breadcrumbView.RemoveItem (item.Identifier);
+		void PopView ()
+		{
+			if (history.Count < 2)
+				return;
 
-            var previousItem = history.Peek ();
-            detailViewController.SetContentView (previousItem.View);
-        }
+			var item = history.Pop ();
+			breadcrumbView.RemoveItem (item.Identifier);
 
-        void ResetHistory ()
-        {
-            foreach (var route in history) {
-                breadcrumbView.RemoveItem (route.Identifier);
-            }
+			var previousItem = history.Peek ();
+			detailViewController.SetContentView (previousItem.View);
 
-            history.Clear ();
-        }
-    }
+			if (history.Count <= 1) {
+				detailViewController.HideBreadcrumb ();
+			}
+		}
+
+		void ResetHistory ()
+		{
+			foreach (var route in history) {
+				breadcrumbView.RemoveItem (route.Identifier);
+			}
+
+			history.Clear ();
+			detailViewController.HideBreadcrumb ();
+		}
+
+		void NavigateTo (string identifier)
+		{
+			RouteItem route;
+
+			while (true) {
+				route = history.Peek ();
+
+				if (route.Identifier != identifier) {
+					history.Pop ();
+					breadcrumbView.RemoveItem (route.Identifier);
+				} else {
+					break;
+				}
+			}
+
+			detailViewController.SetContentView (route.View);
+
+			if (history.Count < 2) {
+				detailViewController.HideBreadcrumb ();
+			}
+		}
+	}
 }
 
