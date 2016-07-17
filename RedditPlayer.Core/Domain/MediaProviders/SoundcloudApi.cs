@@ -74,6 +74,19 @@ namespace RedditPlayer.Domain.MediaProviders
             return json.Select (token => JsonToPlaylist (mediaProvider, token)).ToList ();
         }
 
+        public async Task<List<Track>> GetPopularTracks (Soundcloud mediaProvider, Artist artist)
+        {
+            var client = new HttpClient ();
+            var url = new Uri ($"{BaseUrl}users/{artist.UniqueId}/tracks?client_id={clientId}");
+            var response = await client.GetStringAsync (url);
+
+            var soundcloudTracks = JArray.Parse (response);
+
+            return soundcloudTracks.Children ()
+                                   .Select (token => JsonToTrack (mediaProvider, token))
+                                   .ToList ();
+        }
+
         Playlist JsonToPlaylist (Soundcloud mediaProvider, JToken token)
         {
             var playlist = new Playlist (

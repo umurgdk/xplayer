@@ -47,11 +47,9 @@ namespace RedditPlayer.Domain.MediaProviders
             return await Api.GetPlaylists (this, artist);
         }
 
-        // TODO: Implement Soundcloud#GetPopularTracks(Artist artist)
         public async Task<IList<Track>> GetPopularTracks (Artist artist)
         {
-            Debug.WriteLine ("Soundcloud#GetPopularTracks is not implemented yet!");
-            return new List<Track> ();
+            return await Api.GetPopularTracks (this, artist);
         }
     }
 }
